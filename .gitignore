@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.idea/
+.DS_Store
+
+# Docker/database local data
+mongo_data/
+neo4j_data/
+elastic_data/
+
+# Logs
+*.log
