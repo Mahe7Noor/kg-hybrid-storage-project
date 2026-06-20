@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge graph · hybrid storage search</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --paper:    #F6F2E9;
+    --ink:      #1F1B14;
+    --ink-soft: #5A5247;
+    --rule:     #D9D0BC;
+    --accent:   #8A3B2B;   /* terracotta-ish, used sparingly */
+    --mongo:    #4F7942;
+    --neo:      #2B5C8A;
+    --elastic:  #8A3B2B;
+    --card:     #FFFEFA;
+  }
+
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+  }
+
+  .wrap{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 28px 100px;
+  }
+
+  /* ---------- Header / masthead ---------- */
+  header.masthead{
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 18px;
+    margin-bottom: 28px;
+  }
+  .masthead-top{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .masthead-top h1{
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 2.1rem;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .masthead-top h1 span{
+    color: var(--accent);
+    font-style: italic;
+  }
+  .masthead-meta{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .masthead-sub{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  /* ---------- Stats strip ---------- */
+  .stats{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin-bottom: 32px;
+  }
+  .stat{
+    padding: 14px 16px;
+    border-right: 1px solid var(--rule);
+  }
+  .stat:last-child{ border-right: none; }
+  .stat-num{
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* ---------- Search ---------- */
+  .search-row{
+    display:flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .search-row input[type="text"]{
+    flex: 1;
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem;
+    padding: 14px 16px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    color: var(--ink);
+  }
+  .search-row input[type="text"]:focus{
+    outline: 3px solid var(--accent);
+    outline-offset: 0px;
+  }
+  .search-row button{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 0 22px;
+    cursor: pointer;
+  }
+  .search-row button:hover{ background: var(--accent); border-color: var(--accent); }
+  .search-row button:focus-visible{ outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Filter chips ---------- */
+  .filters{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+  .filter-group{
+    display:flex;
+    align-items:center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 6px;
+  }
+  .chip{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    padding: 6px 13px;
+    border: 1px solid var(--rule);
+    background: var(--card);
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color .15s, color .15s;
+  }
+  .chip:hover{ border-color: var(--ink); color: var(--ink); }
+  .chip.active{
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .chip:focus-visible{ outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .topic-chip{
+    font-size: 0.74rem;
+    padding: 5px 11px;
+  }
+
+  /* ---------- Timing strip ---------- */
+  .timing{
+    display: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+    padding: 10px 14px;
+    background: var(--card);
+    border-left: 3px solid var(--elastic);
+  }
+  .timing.show{ display:block; }
+  .timing b{ color: var(--ink); }
+
+  /* ---------- Results ---------- */
+  .results-meta{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+  }
+
+  .card{
+    background: var(--card);
+    border: 1px solid var(--rule);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .card-top{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .card h3{
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.18rem;
+    font-weight: 600;
+    margin: 0 0 6px;
+    line-height: 1.3;
+  }
+  .card-byline{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .card-byline .year{ color: var(--ink); font-weight: 500; }
+  .card-abstract{
+    font-size: 0.92rem;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .card-topics{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .topic-tag{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 3px 9px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    color: var(--ink-soft);
+  }
+  .card-foot{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+  }
+  .badge{
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 2px;
+  }
+  .badge.me{ background: #E7EFE3; color: var(--mongo); }
+  .badge.teammate{ background: #E4ECF3; color: var(--neo); }
+  .badge.both{ background: #F3E5E0; color: var(--elastic); }
+
+  .empty-state{
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 60px 20px;
+    border: 1px dashed var(--rule);
+  }
+
+  /* ---------- Add topic ---------- */
+  .add-topic{
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+  }
+  .add-topic h4{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .add-topic-row{
+    display:flex;
+    gap: 8px;
+  }
+  .add-topic-row input{
+    flex:1;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    background: var(--card);
+  }
+  .add-topic-row button{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    padding: 0 18px;
+    cursor: pointer;
+  }
+  .add-topic-row button:hover{ background: var(--ink); color: var(--paper); }
+  .add-topic-note{
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px){
+    .stats{ grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2){ border-right: none; }
+    .search-row{ flex-direction: column; }
+    .search-row button{ padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="masthead-top">
+      <h1>Lit<span>Graph</span></h1>
+      <div class="masthead-meta">Big Data Architectures · Summer 2026</div>
+    </div>
+    <div class="masthead-sub">MongoDB · Neo4j · Elasticsearch — hybrid storage for literature review</div>
+  </header>
+
+  <div class="stats" id="stats">
+    <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">papers</div></div>
+    <div class="stat"><div class="stat-num" id="stat-mine">—</div><div class="stat-label">mine</div></div>
+    <div class="stat"><div class="stat-num" id="stat-teammate">—</div><div class="stat-label">teammate</div></div>
+    <div class="stat"><div class="stat-num" id="stat-authors">—</div><div class="stat-label">authors in graph</div></div>
+  </div>
+
+  <div class="search-row">
+    <input type="text" id="searchInput" placeholder="Search across all papers — e.g. graph mining, clustering, attention…" autofocus>
+    <button id="searchBtn">Search</button>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">Show:</div>
+    <button class="chip active" data-contributor="">All papers</button>
+    <button class="chip" data-contributor="me">Mine</button>
+    <button class="chip" data-contributor="teammate">Teammate's</button>
+    <button class="chip" data-contributor="both">Shared</button>
+  </div>
+
+  <div class="filters" id="topicChips"></div>
+
+  <div class="timing" id="timing"></div>
+
+  <div class="results-meta" id="resultsMeta">Type a search above to query the knowledge graph</div>
+  <div id="results"></div>
+
+  <div class="add-topic">
+    <h4>Add a new topic to the collection</h4>
+    <div class="add-topic-row">
+      <input type="text" id="newTopicInput" placeholder="e.g. federated learning, anomaly detection…">
+      <button id="addTopicBtn">Fetch papers</button>
+    </div>
+    <div class="add-topic-note" id="addTopicNote">
+      Pulls new papers from OpenAlex and adds them to all three databases. This can take 10–20 seconds.
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API_BASE = "http://localhost:8000";
+
+let activeContributor = "";
+let activeTopic = null;
+
+const resultsEl = document.getElementById("results");
+const resultsMetaEl = document.getElementById("resultsMeta");
+const timingEl = document.getElementById("timing");
+
+function escapeHtml(str){
+  const div = document.createElement("div");
+  div.textContent = str || "";
+  return div.innerHTML;
+}
+
+async function loadStats(){
+  try{
+    const res = await fetch(`${API_BASE}/api/stats`);
+    const data = await res.json();
+    document.getElementById("stat-total").textContent = data.totalPapers ?? "—";
+    document.getElementById("stat-mine").textContent = data.mine ?? "—";
+    document.getElementById("stat-teammate").textContent = data.teammate ?? "—";
+    document.getElementById("stat-authors").textContent = data.authors ?? "—";
+  }catch(e){
+    console.error("Failed to load stats", e);
+  }
+}
+
+async function loadTopics(){
+  try{
+    const url = activeContributor
+      ? `${API_BASE}/api/topics?contributor=${encodeURIComponent(activeContributor)}`
+      : `${API_BASE}/api/topics`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const container = document.getElementById("topicChips");
+    container.innerHTML = `<div class="filter-group">Topics:</div>`;
+    (data.topics || []).slice(0, 14).forEach(t => {
+      const chip = document.createElement("button");
+      chip.className = "chip topic-chip" + (activeTopic === t.name ? " active" : "");
+      chip.textContent = `${t.name} (${t.count})`;
+      chip.onclick = () => {
+        activeTopic = (activeTopic === t.name) ? null : t.name;
+        document.getElementById("searchInput").value = activeTopic || "";
+        loadTopics();
+        if (activeTopic) runSearch();
+      };
+      container.appendChild(chip);
+    });
+  }catch(e){
+    console.error("Failed to load topics", e);
+  }
+}
+
+function renderResults(data){
+  const { results, timings, total } = data;
+
+  timingEl.classList.add("show");
+  timingEl.innerHTML =
+    `<b>Elasticsearch</b> ${timings.elasticsearch_ms}ms &nbsp;·&nbsp; ` +
+    `<b>MongoDB</b> ${timings.mongodb_ms}ms &nbsp;·&nbsp; ` +
+    `<b>Neo4j</b> ${timings.neo4j_ms}ms &nbsp;·&nbsp; ` +
+    `total <b>${timings.total_ms}ms</b>`;
+
+  if (!results.length){
+    resultsMetaEl.textContent = "No matches";
+    resultsEl.innerHTML = `<div class="empty-state">No papers matched “${escapeHtml(data.query)}”. Try a broader term, or add it as a new topic below.</div>`;
+    return;
+  }
+
+  resultsMetaEl.textContent = `${total} result${total === 1 ? "" : "s"} for “${data.query}”`;
+
+  resultsEl.innerHTML = results.map(r => `
+    <div class="card">
+      <div class="card-top">
+        <h3>${escapeHtml(r.title)}</h3>
+        <span class="badge ${r.contributor}">${escapeHtml(r.contributor)}</span>
+      </div>
+      <div class="card-byline">
+        <span class="year">${r.year ?? "n.d."}</span>
+        &nbsp;·&nbsp; ${escapeHtml((r.authors || []).slice(0,3).join(", ")) || "Unknown authors"}
+        &nbsp;·&nbsp; cited by ${r.citedByCount}
+      </div>
+      <div class="card-abstract">${escapeHtml(r.abstract)}${r.abstract && r.abstract.length >= 280 ? "…" : ""}</div>
+      <div class="card-topics">
+        ${(r.topics || []).slice(0,5).map(t => `<span class="topic-tag">${escapeHtml(t)}</span>`).join("")}
+      </div>
+      <div class="card-foot">
+        <span>relevance ${r.relevance}</span>
+        ${r.referencedPapers && r.referencedPapers.length ? `<span>also references: ${escapeHtml(r.referencedPapers[0])}</span>` : ""}
+      </div>
+    </div>
+  `).join("");
+}
+
+async function runSearch(){
+  const q = document.getElementById("searchInput").value.trim();
+  if (!q){
+    resultsMetaEl.textContent = "Type a search above to query the knowledge graph";
+    resultsEl.innerHTML = "";
+    timingEl.classList.remove("show");
+    return;
+  }
+
+  resultsMetaEl.textContent = "Searching…";
+  resultsEl.innerHTML = "";
+
+  try{
+    const url = new URL(`${API_BASE}/api/search`);
+    url.searchParams.set("q", q);
+    if (activeContributor) url.searchParams.set("contributor", activeContributor);
+
+    const res = await fetch(url);
+    const data = await res.json();
+    renderResults(data);
+  }catch(e){
+    resultsMetaEl.textContent = "Search failed";
+    resultsEl.innerHTML = `<div class="empty-state">Could not reach the API at ${API_BASE}. Is the FastAPI backend running?</div>`;
+    console.error(e);
+  }
+}
+
+document.getElementById("searchBtn").addEventListener("click", runSearch);
+document.getElementById("searchInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") runSearch();
+});
+
+document.querySelectorAll(".filters .chip[data-contributor]").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".filters .chip[data-contributor]").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    activeContributor = chip.dataset.contributor;
+    loadTopics();
+    if (document.getElementById("searchInput").value.trim()) runSearch();
+  });
+});
+
+document.getElementById("addTopicBtn").addEventListener("click", async () => {
+  const topic = document.getElementById("newTopicInput").value.trim();
+  const note = document.getElementById("addTopicNote");
+  if (!topic) return;
+
+  note.textContent = `Fetching papers on "${topic}" from OpenAlex — this may take a moment…`;
+  try{
+    const res = await fetch(`${API_BASE}/api/add-topic`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic })
+    });
+    const data = await res.json();
+    note.textContent = `Added ${data.added ?? 0} new papers on "${topic}". Try searching for it now.`;
+    document.getElementById("newTopicInput").value = "";
+    loadStats();
+    loadTopics();
+  }catch(e){
+    note.textContent = `Could not fetch — make sure the backend's /api/add-topic endpoint is running.`;
+    console.error(e);
+  }
+});
+
+loadStats();
+loadTopics();
+</script>
+
+</body>
+</html>

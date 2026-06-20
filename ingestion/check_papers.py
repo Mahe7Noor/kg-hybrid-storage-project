@@ -1,7 +1,7 @@
 import json
 
 
-with open("data/your_papers.json", encoding="utf-8") as f:
+with open("data/Alekhya_papers.json", encoding="utf-8") as f:
     papers = json.load(f)
 
 print(f"Total papers: {len(papers)}\n")
