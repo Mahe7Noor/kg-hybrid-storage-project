@@ -86,11 +86,12 @@ def clean_paper(work):
 
 # Your topics
 my_topics = [
-    "graph mining knowledge graph",
-    "association rules frequent itemsets mining",
-    "transformer model attention mechanism",
-    "time series deep learning forecasting",
-    "historical data pattern analysis clustering"
+    "computer vision",
+    "fisheye camera datasets",
+    "illuminations and occlusions in fisheye cameras ",
+    "tracking in fisheye cameras and public datasets",
+    "multi person tracking",
+    "detector"
 ]
 
 print("Fetching papers from OpenAlex — free, no API key needed")
@@ -123,7 +124,7 @@ print(f"Total unique papers fetched: {len(all_papers)}")
 
 # Save to file
 os.makedirs("data", exist_ok=True)
-output_file = "data/your_papers.json"
+output_file = "../data/mahenoor_papers.json"
 
 with open(output_file, "w", encoding="utf-8") as f:
     json.dump(all_papers, f, indent=2, ensure_ascii=False)
