@@ -124,7 +124,7 @@ print(f"Total unique papers fetched: {len(all_papers)}")
 
 # Save to file
 os.makedirs("data", exist_ok=True)
-output_file = "../data/mahenoor_papers.json"
+output_file = "../data/your_papers.json"
 
 with open(output_file, "w", encoding="utf-8") as f:
     json.dump(all_papers, f, indent=2, ensure_ascii=False)
