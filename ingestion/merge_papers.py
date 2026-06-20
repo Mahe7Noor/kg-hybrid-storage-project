@@ -5,11 +5,11 @@ import os
 with open("data/Alekhya_papers.json", encoding="utf-8") as f:
     Alekhya_papers = json.load(f)
 
-with open("data/Mahe_papers.json", encoding="utf-8") as f:
+with open("data/Mahenoor_papers.json", encoding="utf-8") as f:
     Mahe_papers = json.load(f)
 
 print(f"Alekhya papers: {len(Alekhya_papers)}")
-print(f"Mahe Noor papers: {len(Mahe_papers)}")
+print(f"Mahe Noor papers: {len(Mahenoor_papers)}")
 
 # Combine and remove duplicates by paperId
 all_papers = Alekhya_papers + Mahe_papers

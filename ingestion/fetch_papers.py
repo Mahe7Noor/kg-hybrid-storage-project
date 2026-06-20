@@ -140,7 +140,7 @@ os.makedirs("data", exist_ok=True)
 <<<<<<< HEAD
 output_file = "data/Alekhya_papers.json"
 =======
-output_file = "../data/mahenoor_papers.json"
+output_file = "../data/Mahenoor_papers.json"
 >>>>>>> 32cec71e96703c306967eb49647eaf36c305cb5b
 
 with open(output_file, "w", encoding="utf-8") as f:
