@@ -86,25 +86,31 @@ def clean_paper(work):
 
 # Your topics
 my_topics = [
-<<<<<<< HEAD
-    "process mining event logs manufacturing",
-    "digital twin learning discrete event simulation",
-    "feature cluster product configurator discovery",
-    "value added process manufacturing discovery",
-    "transformation model input output material flow",
-    "feature selection probability customer demand",
-    "synthetic data generation manufacturing simulation",
-    "process mining generalization real world industrial data",
-    "evaluation methodology synthetic simulation data",
-    "discrete event simulation manufacturing systems"
-=======
-    "computer vision",
-    "fisheye camera datasets",
-    "illuminations and occlusions in fisheye cameras ",
-    "tracking in fisheye cameras and public datasets",
-    "multi person tracking",
-    "detector"
->>>>>>> 32cec71e96703c306967eb49647eaf36c305cb5b
+    "Fundamentals of Computer Vision and Its Applications",
+    "Object Detection Techniques in Computer Vision",
+    "Traditional vs Deep Learning-Based Object Detection Methods",
+    "Evolution of Object Detection: From Haar Cascades to YOLO",
+    "Comparative Study of YOLO, SSD, and Faster R-CNN for Object Detection",
+    "Role of Convolutional Neural Networks in Object Detection",
+    "Real-Time Object Detection Using YOLO Models",
+    "Object Tracking Techniques in Video Surveillance",
+    "Detection-Based Tracking in Computer Vision",
+    "Comparative Review of SORT, DeepSORT, ByteTrack, and BoT-SORT",
+    "Person Detection and Tracking in Video Sequences",
+    "Multi-Object Tracking: Methods, Challenges, and Applications",
+    "Challenges in Object Detection and Tracking Under Occlusion",
+    "Impact of Camera Viewpoint on Object Detection Performance",
+    "Computer Vision for Human Monitoring and Surveillance Systems",
+    "Object Detection and Tracking Using Overhead Cameras",
+    "Person Detection in Fisheye Camera Images",
+    "Tracking Humans in Overhead Fisheye Camera Videos",
+    "Deep Learning-Based Human Detection in Surveillance Videos",
+    "Evaluation Metrics for Object Detection and Tracking",
+    "Datasets for Object Detection and Tracking Research",
+    "Data Augmentation for Improving Object Detection Performance",
+    "Real-Time Person Tracking Using Deep Learning",
+    "Computer Vision for Smart Monitoring Systems",
+    "Challenges and Future Trends in Object Detection and Tracking"
 ]
 
 print("Fetching papers from OpenAlex — free, no API key needed")
@@ -137,11 +143,7 @@ print(f"Total unique papers fetched: {len(all_papers)}")
 
 # Save to file
 os.makedirs("data", exist_ok=True)
-<<<<<<< HEAD
-output_file = "data/Alekhya_papers.json"
-=======
 output_file = "../data/Mahenoor_papers.json"
->>>>>>> 32cec71e96703c306967eb49647eaf36c305cb5b
 
 with open(output_file, "w", encoding="utf-8") as f:
     json.dump(all_papers, f, indent=2, ensure_ascii=False)

@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LitGraph</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white:      #ffffff;
+    --bg:         #f4f6f9;
+    --border:     #e2e8f0;
+    --border-hi:  #cbd5e1;
+    --text:       #1a1f2e;
+    --muted:      #64748b;
+    --light:      #94a3b8;
+    --accent:     #2563eb;
+    --accent-lo:  #eff6ff;
+    --accent-mid: #bfdbfe;
+    --mine:       #16a34a;
+    --mine-lo:    #f0fdf4;
+    --mine-mid:   #bbf7d0;
+    --team:       #ea580c;
+    --team-lo:    #fff7ed;
+    --team-mid:   #fed7aa;
+    --shared:     #7c3aed;
+    --shared-lo:  #f5f3ff;
+    --gold:       #b45309;
+    --gold-lo:    #fffbeb;
+    --gold-mid:   #fde68a;
+    --danger:     #dc2626;
+    --danger-lo:  #fef2f2;
+    --sans:       'Inter', system-ui, -apple-system, sans-serif;
+    --mono:       'JetBrains Mono', 'Fira Code', monospace;
+    --radius:     8px;
+    --shadow:     0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    --shadow-md:  0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.06);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  .logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .logo span { color: var(--accent); }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .12s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-link:hover { border-color: var(--border-hi); color: var(--text); }
+  .nav-link.active {
+    background: var(--gold-lo);
+    border-color: var(--gold-mid);
+    color: var(--gold);
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .stat-item strong {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-mine   { background: var(--mine); }
+  .dot-team   { background: var(--team); }
+
+  /* ── Main layout ── */
+  .layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 24px 60px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .panel-head {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: var(--bg);
+  }
+  .panel-body { padding: 12px; }
+
+  /* Contributor filter */
+  .contrib-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .contrib-btn {
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .12s;
+    text-align: center;
+  }
+  .contrib-btn:hover { border-color: var(--border-hi); color: var(--text); }
+  .contrib-btn.active-all {
+    background: var(--accent-lo); border-color: var(--accent-mid);
+    color: var(--accent); font-weight: 600;
+  }
+  .contrib-btn.active-Alekhya {
+    background: var(--mine-lo); border-color: var(--mine-mid);
+    color: var(--mine); font-weight: 600;
+  }
+  .contrib-btn.active-Mahe\ Noor {
+    background: var(--team-lo); border-color: var(--team-mid);
+    color: var(--team); font-weight: 600;
+  }
+  .contrib-btn.active-shared {
+    background: var(--shared-lo); border-color: #ddd6fe;
+    color: var(--shared); font-weight: 600;
+  }
+  /* make "All papers" span full width */
+  .contrib-btn:first-child { grid-column: 1 / -1; }
+
+  /* Topic dropdown */
+  .topic-dropdown {
+    position: relative;
+  }
+  .topic-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    font-size: 0.8rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color .12s;
+  }
+  .topic-trigger:hover { border-color: var(--border-hi); }
+  .topic-trigger .chev { color: var(--light); transition: transform .15s; font-size: 0.7rem; }
+  .topic-trigger.open .chev { transform: rotate(180deg); }
+  .topic-trigger .tt-label { display: flex; align-items: center; gap: 6px; overflow: hidden; }
+  .topic-trigger .tt-label span:first-child {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  .topic-panel {
+    display: none;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--white);
+    overflow: hidden;
+  }
+  .topic-panel.open { display: block; }
+
+  .topic-list {
+    display: flex;
+    flex-direction: column;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+  .topic-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-bottom: 1px solid var(--bg);
+  }
+  .topic-row:last-child { border-bottom: none; }
+  .topic-btn {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border: none;
+    background: transparent;
+    font-size: 0.78rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .12s;
+    text-align: left;
+    min-width: 0;
+  }
+  .topic-btn span:first-child {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .topic-btn:hover { background: var(--bg); color: var(--text); }
+  .topic-btn.selected {
+    background: var(--accent-lo);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .topic-btn .tc {
+    font-size: 0.68rem;
+    background: var(--border);
+    color: var(--muted);
+    padding: 1px 6px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    margin-left: 6px;
+  }
+  .topic-btn.selected .tc {
+    background: var(--accent-mid);
+    color: var(--accent);
+  }
+  .topic-del {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    margin-right: 6px;
+    border: none;
+    background: transparent;
+    color: var(--light);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .12s;
+  }
+  .topic-del:hover { background: var(--danger-lo); color: var(--danger); }
+
+  .topic-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px 10px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .topic-nav-btn {
+    padding: 4px 9px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    font-size: 0.72rem;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .topic-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .topic-nav-info { font-size: 0.7rem; color: var(--muted); }
+
+  /* Add topic panel */
+  .add-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .add-label::before {
+    content: '+';
+    width: 16px; height: 16px;
+    background: var(--accent);
+    color: white;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .add-input, .add-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    transition: border-color .15s;
+    margin-bottom: 8px;
+    font-family: var(--sans);
+  }
+  .add-input:focus, .add-select:focus { border-color: var(--accent); }
+  .add-input::placeholder { color: var(--light); }
+  .add-btn {
+    width: 100%;
+    padding: 8px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+  .add-btn:hover:not(:disabled) { opacity: 0.88; }
+  .add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Progress */
+  .fetch-progress {
+    display: none;
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .fetch-progress.visible { display: block; }
+  .progress-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pstep {
+    font-size: 0.72rem;
+    color: var(--light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pstep::before { content: '○'; font-size: 0.6rem; }
+  .pstep.active { color: var(--accent); }
+  .pstep.active::before { content: '●'; animation: pulse .8s infinite; }
+  .pstep.done { color: var(--mine); }
+  .pstep.done::before { content: '✓'; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .fetch-note {
+    font-size: 0.68rem;
+    color: var(--light);
+    margin-top: 6px;
+  }
+
+  .add-status {
+    font-size: 0.75rem;
+    margin-top: 6px;
+    min-height: 16px;
+  }
+  .add-status.ok  { color: var(--mine); }
+  .add-status.err { color: var(--danger); }
+
+  /* ── Main content ── */
+  .main { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Search bar */
+  .search-bar {
+    display: flex;
+    gap: 10px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    box-shadow: var(--shadow);
+  }
+  .search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-family: var(--sans);
+    background: transparent;
+    padding: 4px 8px;
+  }
+  .search-input::placeholder { color: var(--light); }
+  .search-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s;
+    white-space: nowrap;
+    font-family: var(--sans);
+  }
+  .search-btn:hover { opacity: 0.88; }
+
+  /* Results header */
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .results-count {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .results-count strong { color: var(--text); font-weight: 600; }
+  .perf-pills {
+    display: flex;
+    gap: 6px;
+  }
+  .perf-pill {
+    font-size: 0.68rem;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .perf-pill span { color: var(--text); font-weight: 600; }
+
+  /* ── Paper card ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 20px 14px 20px;
+    position: relative;
+    transition: box-shadow .15s, border-color .15s;
+    border-left: 4px solid transparent;
+  }
+  .card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-hi);
+  }
+  .card.mine     { border-left-color: var(--mine); }
+  .card.teammate { border-left-color: var(--team); }
+  .card.both     { border-left-color: var(--shared); }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+    flex: 1;
+  }
+  .card-badges {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge-mine   { background: var(--mine-lo);   color: var(--mine);   border: 1px solid var(--mine-mid); }
+  .badge-team   { background: var(--team-lo);   color: var(--team);   border: 1px solid var(--team-mid); }
+  .badge-shared { background: var(--shared-lo); color: var(--shared); border: 1px solid #ddd6fe; }
+  .badge-year   { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+  .badge-cited  { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+
+  .card-authors {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .card-abstract {
+    font-size: 0.83rem;
+    color: #475569;
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .topic-tag {
+    font-size: 0.67rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--accent-lo);
+    color: var(--accent);
+    border: 1px solid var(--accent-mid);
+    font-weight: 500;
+  }
+  .concept-tag {
+    font-size: 0.67rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .fav-by {
+    font-size: 0.67rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--gold-lo);
+    color: var(--gold);
+    border: 1px solid var(--gold-mid);
+  }
+  .card-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+  }
+  .star-btn {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--gold-mid);
+    background: var(--gold-lo);
+    color: var(--gold);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s;
+    white-space: nowrap;
+  }
+  .star-btn:hover { background: var(--gold); color: white; border-color: var(--gold); }
+  .star-btn.active {
+    background: var(--gold);
+    color: white;
+    border-color: var(--gold);
+  }
+  .read-btn {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--accent-mid);
+    background: var(--accent-lo);
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s;
+    white-space: nowrap;
+  }
+  .read-btn:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* ── Pagination ── */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+  }
+  .page-btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s;
+    box-shadow: var(--shadow);
+  }
+  .page-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .page-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .page-info {
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 0 8px;
+  }
+
+  /* ── Empty state ── */
+  .empty {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 60px 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .empty-icon { font-size: 2rem; margin-bottom: 12px; opacity: 0.3; }
+  .empty-text { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Favorites view */
+  .fav-marked-by {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .fav-marked-by strong { color: var(--gold); }
+  .fav-filter-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .topbar { padding: 0 16px; }
+    .stats-row { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="logo">Lit<span>Graph</span></div>
+  <div class="topbar-right">
+    <div class="stats-row">
+      <div class="stat-item">
+        <strong id="s-total">—</strong> papers
+      </div>
+      <div class="stat-item">
+        <span class="dot dot-mine"></span>
+        <strong id="s-mine">—</strong> Alekhya
+      </div>
+      <div class="stat-item">
+        <span class="dot dot-team"></span>
+        <strong id="s-team">—</strong> Mahe Noor
+      </div>
+      <div class="stat-item">
+        <strong id="s-authors">—</strong> authors
+      </div>
+    </div>
+    <button class="nav-link" id="fav-nav-btn">★ Favorites</button>
+  </div>
+</header>
+
+<!-- Main layout -->
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <!-- Search -->
+    <div class="search-bar">
+      <input class="search-input" id="q" type="text"
+        placeholder="Search papers…" autocomplete="off" spellcheck="false" />
+      <button class="search-btn" id="search-btn">Search</button>
+    </div>
+
+    <!-- Contributor filter -->
+    <div class="panel">
+      <div class="panel-head">Show</div>
+      <div class="panel-body">
+        <div class="contrib-btns">
+          <button class="contrib-btn active-all" data-filter="all">All papers</button>
+          <button class="contrib-btn" data-filter="Alekhya">Mine</button>
+          <button class="contrib-btn" data-filter="Mahe Noor">Teammate's</button>
+          <button class="contrib-btn" data-filter="shared">Shared</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Topic filter (dropdown) -->
+    <div class="panel">
+      <div class="panel-head">Filter by topic</div>
+      <div class="panel-body">
+        <div class="topic-dropdown">
+          <button class="topic-trigger" id="topic-trigger" type="button">
+            <span class="tt-label"><span id="topic-trigger-label">All topics</span></span>
+            <span class="chev">▾</span>
+          </button>
+          <div class="topic-panel" id="topic-panel">
+            <div class="topic-list" id="topic-list">
+              <div style="font-size:.75rem;color:var(--light);padding:10px;">Loading…</div>
+            </div>
+            <div class="topic-nav" id="topic-nav" style="display:none">
+              <button class="topic-nav-btn" id="topic-prev">← Prev</button>
+              <span class="topic-nav-info" id="topic-nav-info"></span>
+              <button class="topic-nav-btn" id="topic-next">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add topic -->
+    <div class="panel">
+      <div class="panel-body">
+        <div class="add-label">Add new topic</div>
+        <input class="add-input" id="new-topic"
+          placeholder="e.g. process mining healthcare"
+          autocomplete="off" spellcheck="false" />
+        <select class="add-select" id="new-topic-contributor">
+          <option value="Alekhya">Adding as: Alekhya</option>
+          <option value="Mahe Noor">Adding as: Mahe Noor</option>
+        </select>
+        <button class="add-btn" id="add-topic-btn">Fetch papers from OpenAlex</button>
+
+        <div class="fetch-progress" id="fetch-progress">
+          <div class="progress-steps">
+            <div class="pstep" id="pstep-fetch">Fetching from OpenAlex</div>
+            <div class="pstep" id="pstep-mongo">Saving to MongoDB</div>
+            <div class="pstep" id="pstep-es">Indexing in Elasticsearch</div>
+            <div class="pstep" id="pstep-neo4j">Building Neo4j graph</div>
+          </div>
+          <div class="fetch-note">Takes 15–30 seconds — live internet fetch</div>
+        </div>
+        <div class="add-status" id="add-status"></div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- Results header -->
+    <div class="results-header" id="results-header" style="display:none">
+      <div class="results-count" id="results-count"></div>
+      <div class="perf-pills" id="perf-pills"></div>
+    </div>
+
+    <!-- Results -->
+    <div id="results">
+      <div class="empty">
+        <div class="empty-icon">◈</div>
+        <div class="empty-text">
+          Search for a topic above, or click a topic filter<br>
+          to explore papers already in your knowledge graph.
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination" style="display:none"></div>
+
+  </main>
+</div>
+
+<script>
+  const API_BASE = "http://127.0.0.1:8000";
+  const API = API_BASE;
+  const PER_PAGE  = 10;
+  const TOPICS_PER_PAGE = 10;
+  const PEOPLE    = ['Alekhya', 'Mahe Noor'];
+
+  let activeFilter   = 'all';
+  let activeTopic    = null;
+  let allResults     = [];
+  let currentPage    = 1;
+  let allTopics      = [];       // full topic list for current contributor filter
+  let topicPage      = 1;
+  let viewMode       = 'search'; // 'search' | 'favorites'
+  let favFilterBy    = 'all';
+  let favPage        = 1;
+
+  // ── Stats ──────────────────────────────────────────────────────
+  async function loadStats() {
+    try {
+      const d = await fetch(`${API}/api/stats`).then(r => r.json());
+      document.getElementById('s-total').textContent   = d.total    ?? '—';
+      document.getElementById('s-mine').textContent    = d.mine     ?? '—';
+      document.getElementById('s-team').textContent    = d.teammate ?? '—';
+      document.getElementById('s-authors').textContent = d.authors  ?? '—';
+    } catch {}
+  }
+
+  // ── Topic dropdown ─────────────────────────────────────────────
+  document.getElementById('topic-trigger').addEventListener('click', () => {
+    const trigger = document.getElementById('topic-trigger');
+    const panel   = document.getElementById('topic-panel');
+    trigger.classList.toggle('open');
+    panel.classList.toggle('open');
+  });
+
+  document.addEventListener('click', (e) => {
+    const dropdown = document.querySelector('.topic-dropdown');
+    if (!dropdown.contains(e.target)) {
+      document.getElementById('topic-trigger').classList.remove('open');
+      document.getElementById('topic-panel').classList.remove('open');
+    }
+  });
+
+  async function loadTopics() {
+    const list = document.getElementById('topic-list');
+    try {
+      const topics = await fetch(`${API}/api/topics?contributor=${encodeURIComponent(activeFilter)}`)
+                           .then(r => r.json());
+      allTopics = topics;
+      topicPage = 1;
+      renderTopicPage();
+    } catch {
+      list.innerHTML = '<div style="font-size:.75rem;color:var(--danger);padding:10px;">Backend not reachable</div>';
+    }
+  }
+
+  function renderTopicPage() {
+    const list  = document.getElementById('topic-list');
+    const nav   = document.getElementById('topic-nav');
+    list.innerHTML = '';
+
+    if (!allTopics.length) {
+      list.innerHTML = '<div style="font-size:.75rem;color:var(--light);padding:10px;">No topics yet</div>';
+      nav.style.display = 'none';
+      updateTopicTriggerLabel();
+      return;
+    }
+
+    // "All topics" row always shown at top of page 1
+    if (topicPage === 1) {
+      const row = document.createElement('div');
+      row.className = 'topic-row';
+      const allBtn = document.createElement('button');
+      allBtn.className = 'topic-btn' + (activeTopic === null ? ' selected' : '');
+      allBtn.innerHTML = '<span>All topics</span><span class="tc">' +
+        allTopics.reduce((s, t) => s + t.count, 0) + '</span>';
+      allBtn.onclick = () => {
+        activeTopic = null;
+        currentPage = 1;
+        renderTopicPage();
+        updateTopicTriggerLabel();
+        doSearch();
+      };
+      row.appendChild(allBtn);
+      list.appendChild(row);
+    }
+
+    const totalPages = Math.ceil(allTopics.length / TOPICS_PER_PAGE);
+    const start = (topicPage - 1) * TOPICS_PER_PAGE;
+    const pageTopics = allTopics.slice(start, start + TOPICS_PER_PAGE);
+
+    pageTopics.forEach(({ topic, count }) => {
+      const row = document.createElement('div');
+      row.className = 'topic-row';
+
+      const btn = document.createElement('button');
+      btn.className = 'topic-btn' + (activeTopic === topic ? ' selected' : '');
+      const label = topic.length > 28 ? topic.slice(0, 26) + '…' : topic;
+      btn.innerHTML = `<span title="${topic}">${label}</span><span class="tc">${count}</span>`;
+      btn.onclick = () => {
+        activeTopic = activeTopic === topic ? null : topic;
+        currentPage = 1;
+        renderTopicPage();
+        updateTopicTriggerLabel();
+        doSearch();
+      };
+
+      const del = document.createElement('button');
+      del.className = 'topic-del';
+      del.title = `Delete topic "${topic}" (all ${count} papers, all sources)`;
+      del.textContent = '✕';
+      del.onclick = (e) => {
+        e.stopPropagation();
+        deleteTopic(topic);
+      };
+
+      row.appendChild(del);
+      row.appendChild(btn);
+      list.appendChild(row);
+    });
+
+    // Pagination nav for topics
+    if (totalPages > 1) {
+      nav.style.display = 'flex';
+      document.getElementById('topic-nav-info').textContent = `Page ${topicPage} of ${totalPages}`;
+      document.getElementById('topic-prev').disabled = topicPage === 1;
+      document.getElementById('topic-next').disabled = topicPage === totalPages;
+    } else {
+      nav.style.display = 'none';
+    }
+
+    updateTopicTriggerLabel();
+  }
+
+  function updateTopicTriggerLabel() {
+    const labelEl = document.getElementById('topic-trigger-label');
+    labelEl.textContent = activeTopic ? activeTopic : 'All topics';
+  }
+
+  document.getElementById('topic-prev').addEventListener('click', () => {
+    if (topicPage > 1) { topicPage--; renderTopicPage(); }
+  });
+  document.getElementById('topic-next').addEventListener('click', () => {
+    const totalPages = Math.ceil(allTopics.length / TOPICS_PER_PAGE);
+    if (topicPage < totalPages) { topicPage++; renderTopicPage(); }
+  });
+
+  async function deleteTopic(topic) {
+    if (!confirm(`Delete topic "${topic}"? This removes all its papers from MongoDB, Elasticsearch, and Neo4j. This cannot be undone.`)) {
+      return;
+    }
+    try {
+      const r = await fetch(`${API}/api/topics/${encodeURIComponent(topic)}`, { method: 'DELETE' });
+      const d = await r.json();
+      if (d.error) {
+        alert(d.error);
+        return;
+      }
+      if (activeTopic === topic) {
+        activeTopic = null;
+        currentPage = 1;
+      }
+      loadStats();
+      loadTopics();
+      doSearch();
+    } catch {
+      alert('Could not reach backend to delete topic.');
+    }
+  }
+
+  // ── Contributor buttons ────────────────────────────────────────
+  document.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(b => {
+        b.className = 'contrib-btn';
+        if (b.dataset.filter === activeFilter) {
+          const cls = activeFilter === 'all' ? 'active-all'
+                    : activeFilter === 'shared' ? 'active-shared'
+                    : `active-${activeFilter}`;
+          b.classList.add(cls);
+        }
+      });
+      activeTopic  = null;
+      currentPage  = 1;
+      loadTopics();
+      doSearch();
+    });
+  });
+
+  // ── Favorites (star) ──────────────────────────────────────────
+  async function toggleFavorite(paperId, btnEl, currentlyFavoritedBy) {
+    // Ask which person is marking it, since this is per-person.
+    const who = await pickPerson();
+    if (!who) return;
+
+    const alreadyByThem = (currentlyFavoritedBy || []).includes(who);
+
+    try {
+      if (alreadyByThem) {
+        await fetch(`${API}/api/favorites/${encodeURIComponent(paperId)}?markedBy=${encodeURIComponent(who)}`, {
+          method: 'DELETE'
+        });
+      } else {
+        await fetch(`${API}/api/favorites`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paperId, markedBy: who })
+        });
+      }
+      // Refresh current view to reflect new favorite state
+      if (viewMode === 'favorites') {
+        loadFavorites();
+      } else {
+        doSearch();
+      }
+    } catch {
+      alert('Could not reach backend to update favorite.');
+    }
+  }
+
+  function pickPerson() {
+    return new Promise(resolve => {
+      const choice = prompt(`Mark/unmark for future reference as which person?\n\nType "${PEOPLE[0]}" or "${PEOPLE[1]}"`, PEOPLE[0]);
+      if (!choice) { resolve(null); return; }
+      const trimmed = choice.trim();
+      const match = PEOPLE.find(p => p.toLowerCase() === trimmed.toLowerCase());
+      resolve(match || trimmed);
+    });
+  }
+
+  // ── Render one card ────────────────────────────────────────────
+  function renderCard(p) {
+    const contrib = p.contributor || 'unknown';
+    const labels  = { 'Alekhya': 'mine', 'Mahe Noor': "teammate's", 'both': 'shared' };
+    const bcls    = { 'Alekhya': 'badge-mine', 'Mahe Noor': 'badge-team', 'both': 'badge-shared' };
+    const ccls    = { 'Alekhya': 'mine', 'Mahe Noor': 'teammate', 'both': 'both' };
+
+    const badge  = labels[contrib]
+      ? `<span class="badge ${bcls[contrib]}">${labels[contrib]}</span>` : '';
+    const authors = (p.authors || []).slice(0, 3).join(', ') +
+                    (p.authors?.length > 3 ? ` +${p.authors.length - 3}` : '');
+    const topicTag = p.search_topic
+      ? `<span class="topic-tag">${p.search_topic}</span>` : '';
+    const conceptTags = (p.graph_topics || []).slice(0, 2)
+      .map(c => `<span class="concept-tag">${c}</span>`).join('');
+
+    const favoritedBy = p.favorited_by || [];
+    const favTag = favoritedBy.length
+      ? `<span class="fav-by">★ ${favoritedBy.join(', ')}</span>` : '';
+    const starActive = favoritedBy.length ? 'active' : '';
+    const safePaperId = p.paperId.replace(/'/g, "\\'");
+
+    // OpenAlex URL for reading the full paper
+    const openalexId = p.paperId.startsWith('W') ? p.paperId : '';
+    const readUrl    = openalexId
+      ? `https://openalex.org/${openalexId}`
+      : `https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}`;
+
+    return `
+      <div class="card ${ccls[contrib] || ''}">
+        <div class="card-top">
+          <div class="card-title">${p.title || 'Untitled'}</div>
+          <div class="card-badges">
+            ${badge}
+            <span class="badge badge-year">${p.year || '?'}</span>
+            <span class="badge badge-cited">${p.cited_by_count ?? 0} citations</span>
+          </div>
+        </div>
+        ${authors ? `<div class="card-authors">${authors}</div>` : ''}
+        ${p.abstract ? `<div class="card-abstract">${p.abstract}</div>` : ''}
+        <div class="card-footer">
+          ${topicTag}${conceptTags}${favTag}
+          <div class="card-actions">
+            <button class="star-btn ${starActive}" onclick='toggleFavorite("${safePaperId}", this, ${JSON.stringify(favoritedBy)})'>
+              ${favoritedBy.length ? '★ Marked' : '☆ Mark for later'}
+            </button>
+            <a class="read-btn" href="${readUrl}" target="_blank" rel="noopener">
+              Read paper ↗
+            </a>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // ── Render one favorites-view card (adds marked-by/date line) ──
+  function renderFavCard(p) {
+    const base = renderCard({ ...p, favorited_by: [p.markedBy] });
+    const markedNote = `<div class="fav-marked-by">Marked by <strong>${p.markedBy}</strong> · ${new Date(p.markedAt).toLocaleDateString()}</div>`;
+    return base.replace('<div class="card-footer">', `${markedNote}<div class="card-footer">`);
+  }
+
+  // ── Render current page ────────────────────────────────────────
+  function renderPage() {
+    const start    = (currentPage - 1) * PER_PAGE;
+    const pageData = allResults.slice(start, start + PER_PAGE);
+    const resultsEl = document.getElementById('results');
+
+    if (!pageData.length) {
+      resultsEl.innerHTML = '<div class="empty"><div class="empty-text">No results on this page.</div></div>';
+      return;
+    }
+    resultsEl.innerHTML = pageData.map(renderCard).join('');
+    renderPagination();
+    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Render pagination ──────────────────────────────────────────
+  function renderPagination() {
+    const totalPages = Math.ceil(allResults.length / PER_PAGE);
+    const pagEl      = document.getElementById('pagination');
+
+    if (totalPages <= 1) { pagEl.style.display = 'none'; return; }
+    pagEl.style.display = 'flex';
+
+    pagEl.innerHTML = '';
+
+    const prev = document.createElement('button');
+    prev.className = 'page-btn';
+    prev.textContent = '← Prev';
+    prev.disabled = currentPage === 1;
+    prev.onclick = () => { currentPage--; renderPage(); };
+    pagEl.appendChild(prev);
+
+    const range = 2;
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages ||
+          (i >= currentPage - range && i <= currentPage + range)) {
+        const btn = document.createElement('button');
+        btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+        btn.textContent = i;
+        btn.onclick = () => { currentPage = i; renderPage(); };
+        pagEl.appendChild(btn);
+      } else if (i === currentPage - range - 1 || i === currentPage + range + 1) {
+        const dots = document.createElement('span');
+        dots.className = 'page-info';
+        dots.textContent = '…';
+        pagEl.appendChild(dots);
+      }
+    }
+
+    const next = document.createElement('button');
+    next.className = 'page-btn';
+    next.textContent = 'Next →';
+    next.disabled = currentPage === totalPages;
+    next.onclick = () => { currentPage++; renderPage(); };
+    pagEl.appendChild(next);
+
+    const start = (currentPage - 1) * PER_PAGE + 1;
+    const end   = Math.min(currentPage * PER_PAGE, allResults.length);
+    const info  = document.createElement('span');
+    info.className = 'page-info';
+    info.textContent = `${start}–${end} of ${allResults.length}`;
+    pagEl.appendChild(info);
+  }
+
+  // ── Search ─────────────────────────────────────────────────────
+  async function doSearch() {
+    viewMode = 'search';
+    document.getElementById('fav-nav-btn').classList.remove('active');
+
+    const q         = document.getElementById('q').value.trim();
+    const resultsEl = document.getElementById('results');
+    const headerEl  = document.getElementById('results-header');
+    const pagEl     = document.getElementById('pagination');
+
+    if (!q && activeTopic === null) {
+      headerEl.style.display = 'none';
+      pagEl.style.display    = 'none';
+      allResults = [];
+      resultsEl.innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">◈</div>
+          <div class="empty-text">
+            Search for a topic above, or click a topic filter<br>
+            to explore papers already in your knowledge graph.
+          </div>
+        </div>`;
+      return;
+    }
+
+    resultsEl.innerHTML = `
+      <div class="empty">
+        <div class="empty-text">
+          <span class="spinner"></span>Querying Elasticsearch → MongoDB → Neo4j…
+        </div>
+      </div>`;
+    headerEl.style.display = 'none';
+    pagEl.style.display    = 'none';
+
+    try {
+      const searchQ = q || activeTopic || '';
+      let url = `${API}/api/search?q=${encodeURIComponent(searchQ)}&contributor=${encodeURIComponent(activeFilter)}&top_k=200`;
+      if (activeTopic) url += `&topic=${encodeURIComponent(activeTopic)}`;
+
+      const data = await fetch(url).then(r => r.json());
+
+      if (!data.results?.length) {
+        resultsEl.innerHTML = `
+          <div class="empty">
+            <div class="empty-text">
+              No results for "<strong>${searchQ}</strong>".<br>
+              Try different keywords or add the topic using the panel on the left.
+            </div>
+          </div>`;
+        return;
+      }
+
+      allResults  = data.results;
+      currentPage = 1;
+
+      const t = data.timings || {};
+      headerEl.style.display = 'flex';
+      document.getElementById('results-count').innerHTML =
+        `<strong>${allResults.length}</strong> papers found`;
+      document.getElementById('perf-pills').innerHTML = [
+        `ES <span>${t.elasticsearch_ms ?? '?'}ms</span>`,
+        `Mongo <span>${t.mongodb_ms ?? '?'}ms</span>`,
+        `Neo4j <span>${t.neo4j_ms ?? '?'}ms</span>`,
+        `total <span>${t.total_ms ?? '?'}ms</span>`
+      ].map(s => `<span class="perf-pill">${s}</span>`).join('');
+
+      renderPage();
+    } catch {
+      resultsEl.innerHTML = `
+        <div class="empty">
+          <div class="empty-text" style="color:var(--danger);">
+            Backend not reachable.<br>
+            Run: <code>uvicorn app.backend.main:app --reload --port 8000</code>
+          </div>
+        </div>`;
+    }
+  }
+
+  // ── Favorites view ────────────────────────────────────────────
+  document.getElementById('fav-nav-btn').addEventListener('click', () => {
+    if (viewMode === 'favorites') {
+      // toggle back to search view
+      viewMode = 'search';
+      document.getElementById('fav-nav-btn').classList.remove('active');
+      doSearch();
+    } else {
+      viewMode = 'favorites';
+      favPage = 1;
+      document.getElementById('fav-nav-btn').classList.add('active');
+      loadFavorites();
+    }
+  });
+
+  async function loadFavorites() {
+    const resultsEl = document.getElementById('results');
+    const headerEl  = document.getElementById('results-header');
+    const pagEl     = document.getElementById('pagination');
+
+    resultsEl.innerHTML = `
+      <div class="empty">
+        <div class="empty-text"><span class="spinner"></span>Loading favorites…</div>
+      </div>`;
+    headerEl.style.display = 'none';
+    pagEl.style.display    = 'none';
+
+    try {
+      const url = `${API}/api/favorites?markedBy=${encodeURIComponent(favFilterBy)}&page=${favPage}&per_page=${PER_PAGE}`;
+      const data = await fetch(url).then(r => r.json());
+
+      const filterRowHtml = `
+        <div class="fav-filter-row">
+          ${['all', ...PEOPLE].map(p => `
+            <button class="contrib-btn ${favFilterBy === p ? (p === 'all' ? 'active-all' : `active-${p}`) : ''}"
+                    data-favfilter="${p}">${p === 'all' ? 'Everyone' : p}</button>
+          `).join('')}
+        </div>`;
+
+      if (!data.results?.length) {
+        resultsEl.innerHTML = `
+          ${filterRowHtml}
+          <div class="empty">
+            <div class="empty-icon">★</div>
+            <div class="empty-text">No papers marked for future reference yet.<br>Click "Mark for later" on any paper card.</div>
+          </div>`;
+        wireFavFilterButtons();
+        return;
+      }
+
+      headerEl.style.display = 'flex';
+      document.getElementById('results-count').innerHTML =
+        `<strong>${data.total}</strong> favorited papers`;
+      document.getElementById('perf-pills').innerHTML = '';
+
+      resultsEl.innerHTML = filterRowHtml + data.results.map(p => renderFavCard(p)).join('');
+
+      wireFavFilterButtons();
+      renderFavPagination(data);
+    } catch {
+      resultsEl.innerHTML = `
+        <div class="empty">
+          <div class="empty-text" style="color:var(--danger);">Backend not reachable.</div>
+        </div>`;
+    }
+  }
+
+  function wireFavFilterButtons() {
+    document.querySelectorAll('[data-favfilter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        favFilterBy = btn.dataset.favfilter;
+        favPage = 1;
+        loadFavorites();
+      });
+    });
+  }
+
+  function renderFavPagination(data) {
+    const pagEl = document.getElementById('pagination');
+    const totalPages = data.total_pages || 1;
+    if (totalPages <= 1) { pagEl.style.display = 'none'; return; }
+    pagEl.style.display = 'flex';
+    pagEl.innerHTML = '';
+
+    const prev = document.createElement('button');
+    prev.className = 'page-btn';
+    prev.textContent = '← Prev';
+    prev.disabled = favPage === 1;
+    prev.onclick = () => { favPage--; loadFavorites(); };
+    pagEl.appendChild(prev);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'page-btn' + (i === favPage ? ' active' : '');
+      btn.textContent = i;
+      btn.onclick = () => { favPage = i; loadFavorites(); };
+      pagEl.appendChild(btn);
+    }
+
+    const next = document.createElement('button');
+    next.className = 'page-btn';
+    next.textContent = 'Next →';
+    next.disabled = favPage === totalPages;
+    next.onclick = () => { favPage++; loadFavorites(); };
+    pagEl.appendChild(next);
+  }
+
+  // ── Add topic ──────────────────────────────────────────────────
+  document.getElementById('add-topic-btn').addEventListener('click', async () => {
+    const topic    = document.getElementById('new-topic').value.trim();
+    const contrib  = document.getElementById('new-topic-contributor').value;
+    const status   = document.getElementById('add-status');
+    const progress = document.getElementById('fetch-progress');
+    const btn      = document.getElementById('add-topic-btn');
+    if (!topic) return;
+
+    btn.disabled = true;
+    status.className = 'add-status';
+    status.textContent = '';
+    progress.classList.add('visible');
+
+    const steps = ['pstep-fetch','pstep-mongo','pstep-es','pstep-neo4j'];
+    const activate = i => steps.forEach((id, j) => {
+      const el = document.getElementById(id);
+      el.className = j < i ? 'pstep done' : j === i ? 'pstep active' : 'pstep';
+    });
+
+    activate(0);
+    const timers = [
+      setTimeout(() => activate(1), 7000),
+      setTimeout(() => activate(2), 12000),
+      setTimeout(() => activate(3), 17000),
+    ];
+
+    try {
+      const r = await fetch(`${API}/api/add-topic`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, contributor: contrib })
+      });
+      const d = await r.json();
+      timers.forEach(clearTimeout);
+      steps.forEach(id => document.getElementById(id).className = 'pstep done');
+
+      if (d.error) {
+        status.className = 'add-status err';
+        status.textContent = d.error;
+      } else {
+        status.className = 'add-status ok';
+        status.textContent = `✓ ${d.added} new papers added for "${d.topic}"`;
+        document.getElementById('new-topic').value = '';
+        loadStats();
+        loadTopics();
+      }
+    } catch {
+      timers.forEach(clearTimeout);
+      status.className = 'add-status err';
+      status.textContent = 'Could not reach backend.';
+    }
+
+    setTimeout(() => progress.classList.remove('visible'), 2000);
+    btn.disabled = false;
+  });
+
+  // ── Event listeners ────────────────────────────────────────────
+  document.getElementById('search-btn').addEventListener('click', doSearch);
+  document.getElementById('q').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  // ── Init ───────────────────────────────────────────────────────
+  loadStats();
+  loadTopics();
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@ import os
 
 # Load papers
 print("Loading papers from file...")
-with open("data/Alekhya_papers.json", encoding="utf-8") as f:
+with open("../data/Mahenoor_papers.json", encoding="utf-8") as f:
     papers = json.load(f)
 print(f"Found {len(papers)} papers to load")
 
