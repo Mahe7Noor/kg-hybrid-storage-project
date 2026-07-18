@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LitGraph</title>
+<script src="https://unpkg.com/cytoscape@3.30.4/dist/cytoscape.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -123,12 +124,12 @@
 
   /* ── Main layout ── */
   .layout {
-    max-width: 1200px;
+    width: min(1880px, calc(100% - 32px));
     margin: 0 auto;
-    padding: 24px 24px 60px;
+    padding: 24px 0 60px;
     display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 24px;
+    grid-template-columns: 280px minmax(460px, 1fr) minmax(420px, 0.95fr);
+    gap: 20px;
     align-items: start;
   }
 
@@ -423,22 +424,25 @@
   /* Search bar */
   .search-bar {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 0;
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 10px;
+    padding: 5px;
     box-shadow: var(--shadow);
+    overflow: hidden;
   }
   .search-input {
     flex: 1;
+    min-width: 0;
     border: none;
     outline: none;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     color: var(--text);
     font-family: var(--sans);
     background: transparent;
-    padding: 4px 8px;
+    padding: 7px 9px;
   }
   .search-input::placeholder { color: var(--light); }
   .search-btn {
@@ -446,13 +450,14 @@
     color: white;
     border: none;
     border-radius: 6px;
-    padding: 8px 20px;
-    font-size: 0.85rem;
+    padding: 8px 12px;
+    font-size: 0.78rem;
     font-weight: 600;
     cursor: pointer;
     transition: opacity .15s;
     white-space: nowrap;
     font-family: var(--sans);
+    flex-shrink: 0;
   }
   .search-btn:hover { opacity: 0.88; }
 
@@ -695,13 +700,131 @@
     margin-bottom: 4px;
   }
 
+
+  /* ── Right-side keyword relationship graph ── */
+  .graph-sidebar {
+    position: sticky;
+    top: 80px;
+    min-width: 0;
+  }
+
+  .keyword-graph-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .keyword-graph-head {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg);
+  }
+
+  .keyword-graph-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  #keyword-graph-count {
+    font-size: 0.7rem;
+    color: var(--light);
+    text-align: right;
+  }
+
+  #keyword-graph {
+    width: 100%;
+    height: calc(100vh - 190px);
+    min-height: 560px;
+    max-height: 820px;
+    background: #f8fafc;
+  }
+
+  .graph-details {
+    min-height: 64px;
+    max-height: 130px;
+    overflow-y: auto;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 0.76rem;
+    line-height: 1.55;
+    color: #475569;
+    background: var(--white);
+  }
+
+  .graph-placeholder {
+    height: calc(100vh - 190px);
+    min-height: 560px;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+    color: var(--light);
+    text-align: center;
+    font-size: 0.82rem;
+    background: #f8fafc;
+  }
+
   /* ── Responsive ── */
+  @media (max-width: 1350px) {
+    .layout {
+      grid-template-columns: 260px minmax(440px, 1fr);
+    }
+    .graph-sidebar {
+      grid-column: 1 / -1;
+      position: static;
+    }
+    #keyword-graph {
+      height: 620px;
+      min-height: 520px;
+    }
+  }
+
   @media (max-width: 768px) {
-    .layout { grid-template-columns: 1fr; }
-    .sidebar { position: static; }
+    .layout {
+      width: calc(100% - 24px);
+      grid-template-columns: 1fr;
+      padding-top: 14px;
+    }
+    .sidebar, .graph-sidebar { position: static; }
+    .graph-sidebar { grid-column: auto; }
+    #keyword-graph {
+      height: 520px;
+      min-height: 440px;
+    }
     .topbar { padding: 0 16px; }
     .stats-row { gap: 12px; }
+    .stat-item:nth-child(n+3) { display: none; }
   }
+
+
+  /* ── Neo4j-style graph explorer controls ── */
+  .graph-toolbar { display:flex; flex-wrap:wrap; gap:6px; padding:8px 10px; border-bottom:1px solid #e2e8f0; background:#f8fafc; }
+  .graph-toolbar button, .graph-toolbar select, .graph-toolbar input { border:1px solid #cbd5e1; background:#fff; border-radius:7px; padding:6px 8px; font-size:11px; color:#334155; }
+  .graph-toolbar button { cursor:pointer; font-weight:600; }
+  .graph-toolbar button:hover { background:#eff6ff; border-color:#93c5fd; }
+  .graph-toolbar input { flex:1 1 120px; min-width:100px; }
+  .relation-filters { display:flex; flex-wrap:wrap; gap:8px; padding:7px 10px; border-bottom:1px solid #e2e8f0; font-size:10px; background:#fff; }
+  .relation-filters label { display:flex; align-items:center; gap:3px; cursor:pointer; }
+  .graph-detail-card { padding:10px; font-size:11px; line-height:1.45; }
+  .graph-detail-card h4 { margin:0 0 6px; font-size:13px; color:#0f172a; }
+  .graph-detail-card .meta { color:#64748b; margin-bottom:6px; }
+  .graph-detail-card .actions { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+  .graph-detail-card .actions button, .graph-detail-card .actions a { border:1px solid #cbd5e1; border-radius:6px; background:#fff; padding:5px 7px; font-size:10px; color:#1d4ed8; text-decoration:none; cursor:pointer; }
+  .graph-legend { display:flex; flex-wrap:wrap; gap:8px; padding:7px 10px; border-top:1px solid #e2e8f0; font-size:10px; color:#475569; }
+  .legend-dot { width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:3px; }
+  .graph-context-menu { position:fixed; z-index:9999; display:none; min-width:165px; background:white; border:1px solid #cbd5e1; border-radius:8px; box-shadow:0 10px 30px rgba(15,23,42,.18); padding:5px; }
+  .graph-context-menu button { display:block; width:100%; border:0; background:transparent; text-align:left; padding:7px 8px; border-radius:5px; font-size:11px; cursor:pointer; }
+  .graph-context-menu button:hover { background:#eff6ff; }
+  .graph-hidden { display:none !important; }
+
 </style>
 </head>
 <body>
@@ -716,11 +839,11 @@
       </div>
       <div class="stat-item">
         <span class="dot dot-mine"></span>
-        <strong id="s-mine">—</strong> Alekhya
+        <strong id="s-mine">—</strong> Me
       </div>
       <div class="stat-item">
         <span class="dot dot-team"></span>
-        <strong id="s-team">—</strong> Mahe Noor
+        <strong id="s-team">—</strong> Teammate
       </div>
       <div class="stat-item">
         <strong id="s-authors">—</strong> authors
@@ -749,8 +872,8 @@
       <div class="panel-body">
         <div class="contrib-btns">
           <button class="contrib-btn active-all" data-filter="all">All papers</button>
-          <button class="contrib-btn" data-filter="Alekhya">Mine</button>
-          <button class="contrib-btn" data-filter="Mahe Noor">Teammate's</button>
+          <button class="contrib-btn" data-filter="Alekhya">Me</button>
+          <button class="contrib-btn" data-filter="Mahe Noor">Teammate</button>
           <button class="contrib-btn" data-filter="shared">Shared</button>
         </div>
       </div>
@@ -787,8 +910,8 @@
           placeholder="e.g. process mining healthcare"
           autocomplete="off" spellcheck="false" />
         <select class="add-select" id="new-topic-contributor">
-          <option value="Alekhya">Adding as: Alekhya</option>
-          <option value="Mahe Noor">Adding as: Mahe Noor</option>
+          <option value="Alekhya">Adding as: Me</option>
+          <option value="Mahe Noor">Adding as: Teammate</option>
         </select>
         <button class="add-btn" id="add-topic-btn">Fetch papers from OpenAlex</button>
 
@@ -831,6 +954,65 @@
     <div class="pagination" id="pagination" style="display:none"></div>
 
   </main>
+
+  <!-- Right-side interactive relationship graph -->
+  <aside class="graph-sidebar">
+    <div class="keyword-graph-panel" id="keyword-graph-panel">
+      <div class="keyword-graph-head">
+        <span class="keyword-graph-title">Keyword relationship graph</span>
+        <span id="keyword-graph-count">Search to load graph</span>
+      </div>
+
+      <div class="graph-toolbar">
+        <button type="button" id="graph-fit">Fit</button>
+        <button type="button" id="graph-reset">Reset</button>
+        <button type="button" id="graph-focus">Focus selected</button>
+        <button type="button" id="graph-hide">Hide selected</button>
+        <button type="button" id="graph-show-all">Show all</button>
+        <select id="graph-layout" title="Graph layout">
+          <option value="cose">Connected</option>
+          <option value="concentric">Concentric</option>
+          <option value="breadthfirst">Hierarchy</option>
+          <option value="circle">Circle</option>
+          <option value="grid">Grid</option>
+        </select>
+        <input id="graph-node-search" placeholder="Find node…">
+      </div>
+      <div class="relation-filters">
+        <strong>Relations:</strong>
+        <label><input type="checkbox" data-rel="WROTE" checked> WROTE</label>
+        <label><input type="checkbox" data-rel="HAS_TOPIC" checked> HAS_TOPIC</label>
+        <label><input type="checkbox" data-rel="REFERENCES" checked> REFERENCES</label>
+        <label><input type="checkbox" data-rel="RELATED_TO" checked> RELATED_TO</label>
+        <label><input type="checkbox" data-rel="ADDED_UNDER" checked> ADDED_UNDER</label>
+        <label title="Only show dynamically expanded Paper nodes matching the selected contributor."><input type="checkbox" id="graph-strict-contributor"> Strict contributor</label>
+      </div>
+
+      <div id="keyword-graph">
+        <div class="graph-placeholder" id="graph-placeholder">
+          Search for papers to display their Neo4j relationships here.
+        </div>
+      </div>
+
+      <div class="graph-details" id="graph-details">
+        Yellow-bordered papers matched the keyword. Select a node or relationship for details.
+      </div>
+      <div class="graph-legend">
+        <span><i class="legend-dot" style="background:#2563eb"></i>Paper</span>
+        <span><i class="legend-dot" style="background:#ea580c"></i>Reference</span>
+        <span><i class="legend-dot" style="background:#16a34a"></i>Author</span>
+        <span><i class="legend-dot" style="background:#7c3aed"></i>Concept</span>
+        <span><i class="legend-dot" style="background:#b45309"></i>Search topic</span>
+        <span>Yellow border = keyword match</span>
+      </div>
+      <div class="graph-context-menu" id="graph-context-menu">
+        <button data-action="focus">Focus node</button>
+        <button data-action="neighbors">Show only neighbours</button>
+        <button data-action="hide">Hide node</button>
+        <button data-action="open">Open paper</button>
+      </div>
+    </div>
+  </aside>
 </div>
 
 <script>
@@ -838,7 +1020,7 @@
   const API = API_BASE;
   const PER_PAGE  = 10;
   const TOPICS_PER_PAGE = 10;
-  const PEOPLE    = ['Alekhya', 'Mahe Noor'];
+  const PEOPLE    = ['me', 'teammate'];
 
   let activeFilter   = 'all';
   let activeTopic    = null;
@@ -849,6 +1031,550 @@
   let viewMode       = 'search'; // 'search' | 'favorites'
   let favFilterBy    = 'all';
   let favPage        = 1;
+
+  let keywordCy      = null;
+
+  function clearKeywordRelationshipGraph(message = 'Search for papers to display their Neo4j relationships here.') {
+    const container = document.getElementById('keyword-graph');
+    const count = document.getElementById('keyword-graph-count');
+    const details = document.getElementById('graph-details');
+
+    if (keywordCy) {
+      keywordCy.destroy();
+      keywordCy = null;
+    }
+
+    count.textContent = 'No graph loaded';
+    container.innerHTML = `<div class="graph-placeholder">${escapeHtml(message)}</div>`;
+    details.textContent = 'Yellow-bordered papers matched the keyword. Select a node or relationship for details.';
+  }
+
+  async function loadKeywordRelationshipGraph(searchQuery) {
+    const container = document.getElementById('keyword-graph');
+    const count = document.getElementById('keyword-graph-count');
+    const details = document.getElementById('graph-details');
+
+    if (!searchQuery || !searchQuery.trim()) {
+      clearKeywordRelationshipGraph();
+      return;
+    }
+
+    if (keywordCy) {
+      keywordCy.destroy();
+      keywordCy = null;
+    }
+
+    container.innerHTML = `
+      <div class="graph-placeholder">
+        <div><span class="spinner"></span>Loading Neo4j relationships…</div>
+      </div>`;
+    count.textContent = 'Loading…';
+    details.textContent = 'Querying the keyword graph endpoint…';
+
+    let url =
+      `${API}/api/keyword-graph?q=${encodeURIComponent(searchQuery)}` +
+      `&contributor=${encodeURIComponent(activeFilter)}` +
+      `&top_k=15&neighbors_per_paper=4`;
+
+    if (activeTopic) {
+      url += `&topic=${encodeURIComponent(activeTopic)}`;
+    }
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Graph API returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      renderKeywordRelationshipGraph(data);
+    } catch (error) {
+      console.error(error);
+      count.textContent = 'Graph unavailable';
+      container.innerHTML = `
+        <div class="graph-placeholder">
+          Could not load the Neo4j keyword graph.<br>
+          Confirm that <code>/api/keyword-graph</code> exists.
+        </div>`;
+      details.textContent = error.message || 'Could not load the graph.';
+    }
+  }
+
+  function renderKeywordRelationshipGraph(data) {
+    const container = document.getElementById('keyword-graph');
+    const details = document.getElementById('graph-details');
+    const nodes = Array.isArray(data.nodes) ? data.nodes : [];
+    const edges = Array.isArray(data.edges) ? data.edges : [];
+
+    document.getElementById('keyword-graph-count').textContent =
+      `${nodes.length} nodes · ${edges.length} relationships`;
+
+    if (!nodes.length) {
+      container.innerHTML = `
+        <div class="graph-placeholder">
+          No Neo4j graph relationships were found for this search.
+        </div>`;
+      details.textContent = 'The papers may not yet have RELATED_TO, WROTE, HAS_TOPIC, or REFERENCES relationships.';
+      return;
+    }
+
+    container.innerHTML = '';
+
+    const elements = [
+      ...nodes.map(node => ({
+        data: {
+          id: node.id,
+          label: node.text || node.label || node.title || node.name || node.id,
+          nodeType: node.type || node.nodeType || 'Paper',
+          paperId: node.paperId || '',
+          matched: Boolean(node.matched),
+          relevanceScore: Number(node.relevanceScore || node.relevance_score || 0),
+          year: node.year || '',
+          contributor: node.contributor || '',
+          abstract: node.abstract || '',
+          citedByCount: node.cited_by_count || node.citedByCount || 0,
+          openAlexUrl: node.paperId ? `https://openalex.org/${node.paperId}` : ''
+        }
+      })),
+      ...edges.map((edge, index) => ({
+        data: {
+          id: edge.id || `edge:${index}:${edge.source}:${edge.target}`,
+          source: edge.source,
+          target: edge.target,
+          relation: edge.type || edge.relation || 'RELATED',
+          score: Number(edge.score || 0),
+          reason: edge.reason || '',
+          sharedConcepts: edge.sharedConcepts || edge.shared_concepts || [],
+          sharedAuthors: edge.sharedAuthors || edge.shared_authors || [],
+          directReference: Boolean(edge.directReference || edge.direct_reference)
+        }
+      }))
+    ];
+
+    keywordCy = cytoscape({
+      container,
+      elements,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'label': 'data(label)',
+            'font-size': 9,
+            'text-wrap': 'wrap',
+            'text-max-width': 105,
+            'text-valign': 'bottom',
+            'text-margin-y': 7,
+            'background-color': '#64748b',
+            'width': 27,
+            'height': 27,
+            'border-width': 2,
+            'border-color': '#ffffff'
+          }
+        },
+        {
+          selector: 'node[nodeType = "Paper"]',
+          style: {
+            'background-color': '#2563eb',
+            'width': 38,
+            'height': 38
+          }
+        },
+        {
+          selector: 'node[nodeType = "Reference"]',
+          style: { 'background-color': '#ea580c' }
+        },
+        {
+          selector: 'node[nodeType = "Author"]',
+          style: { 'background-color': '#16a34a' }
+        },
+        {
+          selector: 'node[nodeType = "Concept"]',
+          style: { 'background-color': '#7c3aed' }
+        },
+        {
+          selector: 'node[nodeType = "SearchTopic"]',
+          style: { 'background-color': '#b45309', 'shape': 'round-rectangle' }
+        },
+        {
+          selector: 'node[matched]',
+          style: {
+            'border-width': 5,
+            'border-color': '#fbbf24'
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'curve-style': 'bezier',
+            'width': 1.3,
+            'line-color': '#cbd5e1',
+            'target-arrow-color': '#cbd5e1',
+            'target-arrow-shape': 'triangle',
+            'label': 'data(relation)',
+            'font-size': 7,
+            'text-background-color': '#ffffff',
+            'text-background-opacity': 0.85,
+            'text-background-padding': 2
+          }
+        },
+        {
+          selector: 'edge[relation = "RELATED_TO"]',
+          style: {
+            'line-color': '#2563eb',
+            'target-arrow-color': '#2563eb',
+            'width': 'mapData(score, 2, 15, 2, 7)'
+          }
+        },
+        {
+          selector: '.dimmed',
+          style: { 'opacity': 0.12, 'text-opacity': 0.12 }
+        },
+        {
+          selector: '.hidden-element',
+          style: { 'display': 'none' }
+        },
+        {
+          selector: '.search-hit',
+          style: { 'border-width': 6, 'border-color': '#ef4444', 'z-index': 999 }
+        },
+        {
+          selector: ':selected',
+          style: {
+            'overlay-opacity': 0.12,
+            'overlay-color': '#2563eb'
+          }
+        }
+      ],
+      layout: {
+        name: 'cose',
+        animate: true,
+        nodeRepulsion: 9000,
+        idealEdgeLength: 105,
+        edgeElasticity: 100,
+        gravity: 0.25,
+        numIter: 1200,
+        randomize: true
+      }
+    });
+
+    const paperResultById = new Map(
+      (Array.isArray(allResults) ? allResults : [])
+        .filter(item => item && item.paperId)
+        .map(item => [String(item.paperId), item])
+    );
+
+    function nodeDetailsHtml(nodeData) {
+      const result = paperResultById.get(String(nodeData.paperId || '')) || {};
+      const title = nodeData.label || result.title || nodeData.id;
+      const abstract = result.abstract || nodeData.abstract || '';
+      const authors = Array.isArray(result.authors)
+        ? result.authors.map(a => typeof a === 'string' ? a : a.name).filter(Boolean)
+        : [];
+      const concepts = result.graph_topics || result.concepts || [];
+      const contributor = result.contributor || nodeData.contributor || '';
+      const cited = result.cited_by_count ?? nodeData.citedByCount ?? '';
+      const doi = result.doi || '';
+      const externalUrl = doi
+        ? (String(doi).startsWith('http') ? doi : `https://doi.org/${doi}`)
+        : nodeData.openAlexUrl;
+
+      return `<div class="graph-detail-card">
+        <h4>${escapeHtml(title)}</h4>
+        <div class="meta">
+          ${escapeHtml(nodeData.nodeType)}
+          ${nodeData.year ? ` · ${escapeHtml(nodeData.year)}` : ''}
+          ${contributor ? ` · ${escapeHtml(contributor)}` : ''}
+          ${cited !== '' ? ` · ${escapeHtml(cited)} citations` : ''}
+        </div>
+        ${authors.length ? `<div><strong>Authors:</strong> ${authors.slice(0,8).map(escapeHtml).join(', ')}</div>` : ''}
+        ${concepts.length ? `<div><strong>Concepts:</strong> ${concepts.slice(0,8).map(c => escapeHtml(typeof c === 'string' ? c : c.name || c.display_name || '')).join(', ')}</div>` : ''}
+        ${abstract ? `<p>${escapeHtml(String(abstract).slice(0,650))}${String(abstract).length > 650 ? '…' : ''}</p>` : ''}
+        <div class="actions">
+          <button onclick="graphFocusNode('${escapeHtml(nodeData.id)}')">Focus</button>
+          <button onclick="graphShowNeighbours('${escapeHtml(nodeData.id)}')">Neighbours</button>
+          <button onclick="graphExpandNode('${escapeHtml(nodeData.id)}')">Expand from Neo4j</button>
+          ${externalUrl ? `<a href="${escapeHtml(externalUrl)}" target="_blank" rel="noopener">Open paper</a>` : ''}
+        </div>
+      </div>`;
+    }
+
+    keywordCy.on('tap', 'node', event => {
+      const node = event.target;
+      details.innerHTML = nodeDetailsHtml(node.data());
+      node.select();
+    });
+
+    keywordCy.on('tap', 'edge', event => {
+      const edge = event.target.data();
+      const sourceLabel = keywordCy.getElementById(edge.source).data('label') || edge.source;
+      const targetLabel = keywordCy.getElementById(edge.target).data('label') || edge.target;
+
+      if (edge.relation === 'RELATED_TO') {
+        const conceptText = edge.sharedConcepts.length
+          ? `<div><strong>Shared concepts:</strong> ${edge.sharedConcepts.map(escapeHtml).join(', ')}</div>` : '';
+        const authorText = edge.sharedAuthors.length
+          ? `<div><strong>Shared authors:</strong> ${edge.sharedAuthors.map(escapeHtml).join(', ')}</div>` : '';
+        const citationText = edge.directReference
+          ? '<div><strong>Direct citation:</strong> Yes</div>' : '<div><strong>Direct citation:</strong> No</div>';
+
+        details.innerHTML = `<div class="graph-detail-card">
+          <h4>RELATED_TO</h4>
+          <div class="meta">${escapeHtml(sourceLabel)} → ${escapeHtml(targetLabel)}</div>
+          <div><strong>Similarity score:</strong> ${escapeHtml(edge.score)}</div>
+          ${edge.reason ? `<div><strong>Reason:</strong> ${escapeHtml(edge.reason)}</div>` : ''}
+          ${conceptText}${authorText}${citationText}
+        </div>`;
+      } else {
+        details.innerHTML = `<div class="graph-detail-card"><h4>${escapeHtml(edge.relation)}</h4>
+          <div>${escapeHtml(sourceLabel)} → ${escapeHtml(targetLabel)}</div></div>`;
+      }
+    });
+
+    // Double-click style interaction: a second tap within 350 ms focuses the node.
+    let lastTappedNode = null;
+    let lastTapTime = 0;
+    keywordCy.on('tap', 'node', event => {
+      const now = Date.now();
+      const id = event.target.id();
+      if (lastTappedNode === id && now - lastTapTime < 350) {
+        graphExpandNode(id);
+      }
+      lastTappedNode = id;
+      lastTapTime = now;
+    });
+
+    keywordCy.on('mouseover', 'node, edge', e => e.target.style('cursor', 'pointer'));
+
+    keywordCy.on('cxttap', 'node', event => {
+      const menu = document.getElementById('graph-context-menu');
+      const pos = event.originalEvent || {};
+      menu.dataset.nodeId = event.target.id();
+      menu.style.left = `${pos.clientX || 20}px`;
+      menu.style.top = `${pos.clientY || 20}px`;
+      menu.style.display = 'block';
+    });
+
+    keywordCy.on('tap', event => {
+      if (event.target === keywordCy) document.getElementById('graph-context-menu').style.display = 'none';
+    });
+
+    applyRelationFilters();
+    details.textContent =
+      'Click a node for details, double-click to fetch and expand its Neo4j neighbourhood, or right-click for actions.';
+  }
+
+  function runGraphLayout(name) {
+    if (!keywordCy) return;
+    const options = { name, animate: true, fit: true, padding: 24 };
+    if (name === 'cose') Object.assign(options, { nodeRepulsion: 9000, idealEdgeLength: 105, gravity: .25, numIter: 1000 });
+    if (name === 'breadthfirst') Object.assign(options, { directed: true, spacingFactor: 1.25 });
+    keywordCy.layout(options).run();
+  }
+
+  function graphFocusNode(id) {
+    if (!keywordCy) return;
+    const node = keywordCy.getElementById(id);
+    if (!node.length) return;
+    keywordCy.elements().addClass('dimmed');
+    node.closedNeighborhood().removeClass('dimmed');
+    keywordCy.animate({ fit: { eles: node.closedNeighborhood(), padding: 45 }, duration: 350 });
+    node.select();
+  }
+
+  function graphShowNeighbours(id) {
+    if (!keywordCy) return;
+    const node = keywordCy.getElementById(id);
+    if (!node.length) return;
+    keywordCy.elements().addClass('hidden-element');
+    node.closedNeighborhood().removeClass('hidden-element');
+    runGraphLayout('concentric');
+    node.select();
+  }
+
+  function normaliseGraphNode(node) {
+    return {
+      data: {
+        id: node.id,
+        label: node.text || node.label || node.title || node.name || node.id,
+        nodeType: node.type || node.nodeType || 'Paper',
+        paperId: node.paperId || '',
+        matched: Boolean(node.matched),
+        relevanceScore: Number(node.relevanceScore || node.relevance_score || 0),
+        year: node.year || '',
+        contributor: node.contributor || '',
+        abstract: node.abstract || '',
+        citedByCount: node.cited_by_count || node.citedByCount || 0,
+        openAlexUrl: node.paperId ? `https://openalex.org/${node.paperId}` : ''
+      }
+    };
+  }
+
+  function normaliseGraphEdge(edge, index = 0) {
+    return {
+      data: {
+        id: edge.id || `edge:${edge.type || edge.relation || 'RELATED'}:${edge.source}:${edge.target}:${index}`,
+        source: edge.source,
+        target: edge.target,
+        relation: edge.type || edge.relation || 'RELATED',
+        score: Number(edge.score || 0),
+        reason: edge.reason || '',
+        sharedConcepts: edge.sharedConcepts || edge.shared_concepts || [],
+        sharedAuthors: edge.sharedAuthors || edge.shared_authors || [],
+        directReference: Boolean(edge.directReference || edge.direct_reference)
+      }
+    };
+  }
+
+  async function graphExpandNode(id) {
+    if (!keywordCy) return;
+    const details = document.getElementById('graph-details');
+    const centerNode = keywordCy.getElementById(id);
+    if (!centerNode.length) return;
+
+    details.innerHTML = `<div class="graph-detail-card"><h4>Expanding graph…</h4>
+      <div class="meta">Fetching immediate relationships for ${escapeHtml(centerNode.data('label') || id)} from Neo4j.</div></div>`;
+
+    const strictCheckbox = document.getElementById('graph-strict-contributor');
+    const strict = strictCheckbox ? strictCheckbox.checked : false;
+    const url = `${API}/api/graph-expand?node_id=${encodeURIComponent(id)}` +
+      `&contributor=${encodeURIComponent(activeFilter)}` +
+      `&strict_contributor=${strict ? 'true' : 'false'}&limit=50`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Expansion API returned ${response.status}`);
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      const incomingNodes = Array.isArray(data.nodes) ? data.nodes : [];
+      const incomingEdges = Array.isArray(data.edges) ? data.edges : [];
+      let addedNodes = 0;
+      let addedEdges = 0;
+
+      keywordCy.batch(() => {
+        incomingNodes.forEach(node => {
+          const existing = keywordCy.getElementById(node.id);
+          if (existing.length) {
+            const updated = normaliseGraphNode(node).data;
+            Object.entries(updated).forEach(([key, value]) => {
+              if (value !== '' && value !== null && value !== undefined) existing.data(key, value);
+            });
+            existing.removeClass('hidden-element dimmed');
+          } else {
+            keywordCy.add(normaliseGraphNode(node));
+            addedNodes += 1;
+          }
+        });
+
+        incomingEdges.forEach((edge, index) => {
+          const edgeId = edge.id || `edge:${edge.type || edge.relation || 'RELATED'}:${edge.source}:${edge.target}:${index}`;
+          const duplicate = keywordCy.edges().filter(e =>
+            e.data('source') === edge.source &&
+            e.data('target') === edge.target &&
+            e.data('relation') === (edge.type || edge.relation || 'RELATED')
+          );
+          if (!duplicate.length && !keywordCy.getElementById(edgeId).length) {
+            keywordCy.add(normaliseGraphEdge({...edge, id: edgeId}, index));
+            addedEdges += 1;
+          }
+        });
+      });
+
+      applyRelationFilters();
+      const neighbourhood = centerNode.closedNeighborhood();
+      neighbourhood.removeClass('hidden-element dimmed');
+      keywordCy.layout({
+        name: 'cose', animate: true, fit: true, padding: 35,
+        nodeRepulsion: 10000, idealEdgeLength: 110, gravity: .22, numIter: 800
+      }).run();
+      centerNode.select();
+
+      document.getElementById('keyword-graph-count').textContent =
+        `${keywordCy.nodes().length} nodes · ${keywordCy.edges().length} relationships`;
+      details.innerHTML = `<div class="graph-detail-card"><h4>Neo4j expansion complete</h4>
+        <div><strong>Added:</strong> ${addedNodes} nodes and ${addedEdges} relationships.</div>
+        <div class="meta">${strict ? 'Strict contributor filtering was applied.' : 'Contextual filtering allowed connected papers from other contributors.'}</div></div>`;
+    } catch (error) {
+      console.error(error);
+      details.innerHTML = `<div class="graph-detail-card"><h4>Expansion failed</h4>
+        <div>${escapeHtml(error.message || 'Could not expand this node.')}</div>
+        <div class="meta">Confirm that <code>/api/graph-expand</code> is available and Neo4j is running.</div></div>`;
+    }
+  }
+
+  function graphOpenNode(id) {
+    if (!keywordCy) return;
+    const node = keywordCy.getElementById(id);
+    const paperId = node.data('paperId');
+    if (paperId) window.open(`https://openalex.org/${encodeURIComponent(paperId)}`, '_blank', 'noopener');
+  }
+
+  function applyRelationFilters() {
+    if (!keywordCy) return;
+    const active = new Set([...document.querySelectorAll('[data-rel]')].filter(x => x.checked).map(x => x.dataset.rel));
+    keywordCy.edges().forEach(edge => {
+      edge.toggleClass('hidden-element', !active.has(edge.data('relation')));
+    });
+    keywordCy.nodes().forEach(node => {
+      const visibleEdgeCount = node.connectedEdges().filter(e => !e.hasClass('hidden-element')).length;
+      const isMatched = Boolean(node.data('matched'));
+      node.toggleClass('hidden-element', !visibleEdgeCount && !isMatched);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('graph-fit')?.addEventListener('click', () => keywordCy?.fit(undefined, 25));
+    document.getElementById('graph-reset')?.addEventListener('click', () => {
+      if (!keywordCy) return;
+      keywordCy.elements().removeClass('hidden-element dimmed search-hit');
+      applyRelationFilters();
+      runGraphLayout(document.getElementById('graph-layout').value);
+    });
+    document.getElementById('graph-focus')?.addEventListener('click', () => {
+      const node = keywordCy?.$('node:selected').first();
+      if (node?.length) graphFocusNode(node.id());
+    });
+    document.getElementById('graph-hide')?.addEventListener('click', () => keywordCy?.$(':selected').addClass('hidden-element'));
+    document.getElementById('graph-show-all')?.addEventListener('click', () => {
+      keywordCy?.elements().removeClass('hidden-element dimmed search-hit');
+      applyRelationFilters();
+      keywordCy?.fit(undefined, 25);
+    });
+    document.getElementById('graph-layout')?.addEventListener('change', e => runGraphLayout(e.target.value));
+    document.querySelectorAll('[data-rel]').forEach(box => box.addEventListener('change', applyRelationFilters));
+    document.getElementById('graph-node-search')?.addEventListener('input', e => {
+      if (!keywordCy) return;
+      const q = e.target.value.trim().toLowerCase();
+      keywordCy.nodes().removeClass('search-hit dimmed');
+      if (!q) return;
+      const hits = keywordCy.nodes().filter(n => String(n.data('label')).toLowerCase().includes(q));
+      keywordCy.nodes().not(hits).addClass('dimmed');
+      hits.addClass('search-hit');
+      if (hits.length) keywordCy.animate({ fit: { eles: hits, padding: 60 }, duration: 250 });
+    });
+    document.getElementById('graph-context-menu')?.addEventListener('click', e => {
+      const action = e.target.dataset.action;
+      const menu = e.currentTarget;
+      const id = menu.dataset.nodeId;
+      if (action === 'focus') graphFocusNode(id);
+      if (action === 'neighbors') graphShowNeighbours(id);
+      if (action === 'hide') keywordCy?.getElementById(id).addClass('hidden-element');
+      if (action === 'open') graphOpenNode(id);
+      menu.style.display = 'none';
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#graph-context-menu')) document.getElementById('graph-context-menu')?.style.setProperty('display','none');
+    });
+  });
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
 
   // ── Stats ──────────────────────────────────────────────────────
   async function loadStats() {
@@ -1204,6 +1930,7 @@
       headerEl.style.display = 'none';
       pagEl.style.display    = 'none';
       allResults = [];
+      clearKeywordRelationshipGraph();
       resultsEl.innerHTML = `
         <div class="empty">
           <div class="empty-icon">◈</div>
@@ -1257,6 +1984,7 @@
       ].map(s => `<span class="perf-pill">${s}</span>`).join('');
 
       renderPage();
+      loadKeywordRelationshipGraph(searchQ);
     } catch {
       resultsEl.innerHTML = `
         <div class="empty">
@@ -1284,6 +2012,7 @@
   });
 
   async function loadFavorites() {
+    clearKeywordRelationshipGraph('The graph is shown for keyword search results, not the favorites view.');
     const resultsEl = document.getElementById('results');
     const headerEl  = document.getElementById('results-header');
     const pagEl     = document.getElementById('pagination');
@@ -1419,8 +2148,12 @@
         status.className = 'add-status ok';
         status.textContent = `✓ ${d.added} new papers added for "${d.topic}"`;
         document.getElementById('new-topic').value = '';
+        document.getElementById('q').value = topic;
+        activeTopic = topic;
+        currentPage = 1;
         loadStats();
         loadTopics();
+        doSearch();
       }
     } catch {
       timers.forEach(clearTimeout);

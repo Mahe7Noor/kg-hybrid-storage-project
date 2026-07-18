@@ -17875,7 +17875,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 2363,
+    "cited_by_count": 2364,
     "references": [
       {
         "paperId": "W603908379",
@@ -18147,7 +18147,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 5188,
+    "cited_by_count": 5189,
     "references": [
       {
         "paperId": "W68733909",
@@ -19744,7 +19744,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 2855,
+    "cited_by_count": 2856,
     "references": [
       {
         "paperId": "W124653583",
@@ -21002,7 +21002,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 12397,
+    "cited_by_count": 12399,
     "references": [
       {
         "paperId": "W54257720",
@@ -22180,7 +22180,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 1679,
+    "cited_by_count": 1680,
     "references": [
       {
         "paperId": "W1632114991",
@@ -23071,7 +23071,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 164,
+    "cited_by_count": 165,
     "references": [
       {
         "paperId": "W2988916019",
@@ -24883,6 +24883,117 @@
     ]
   },
   {
+    "paperId": "W4405446156",
+    "title": "The YOLO Framework: A Comprehensive Review of Evolution, Applications, and Benchmarks in Object Detection",
+    "abstract": "This paper provides a comprehensive review of the YOLO (You Only Look Once) framework up to its latest version, YOLO 11. As a state-of-the-art model for object detection, YOLO has revolutionized the field by achieving an optimal balance between speed and accuracy. The review traces the evolution of YOLO variants, highlighting key architectural improvements, performance benchmarks, and applications in domains such as healthcare, autonomous vehicles, and robotics. It also evaluates the framework’s strengths and limitations in practical scenarios, addressing challenges like small object detection, environmental variability, and computational constraints. By synthesizing findings from recent research, this work identifies critical gaps in the literature and outlines future directions to enhance YOLO’s adaptability, robustness, and integration into emerging technologies. This review provides researchers and practitioners with valuable insights to drive innovation in object detection and related applications.",
+    "year": 2024,
+    "authors": [
+      {
+        "authorId": "A5027473281",
+        "name": "Momina Liaqat Ali"
+      },
+      {
+        "authorId": "A5100397183",
+        "name": "Zhou Zhang"
+      }
+    ],
+    "citations": [],
+    "cited_by_count": 302,
+    "references": [
+      {
+        "paperId": "W639708223",
+        "title": ""
+      },
+      {
+        "paperId": "W1861492603",
+        "title": ""
+      },
+      {
+        "paperId": "W2193145675",
+        "title": ""
+      },
+      {
+        "paperId": "W2609144136",
+        "title": ""
+      },
+      {
+        "paperId": "W2612624696",
+        "title": ""
+      },
+      {
+        "paperId": "W2772155277",
+        "title": ""
+      },
+      {
+        "paperId": "W2800816754",
+        "title": ""
+      },
+      {
+        "paperId": "W2884367402",
+        "title": ""
+      },
+      {
+        "paperId": "W2893538180",
+        "title": ""
+      },
+      {
+        "paperId": "W2909494862",
+        "title": ""
+      },
+      {
+        "paperId": "W2919234133",
+        "title": ""
+      },
+      {
+        "paperId": "W2929565236",
+        "title": ""
+      },
+      {
+        "paperId": "W2950952672",
+        "title": ""
+      },
+      {
+        "paperId": "W2963037989",
+        "title": ""
+      },
+      {
+        "paperId": "W2963144738",
+        "title": ""
+      },
+      {
+        "paperId": "W2963351448",
+        "title": ""
+      },
+      {
+        "paperId": "W2963604034",
+        "title": ""
+      },
+      {
+        "paperId": "W2983943451",
+        "title": ""
+      },
+      {
+        "paperId": "W2988561273",
+        "title": ""
+      },
+      {
+        "paperId": "W3009010606",
+        "title": ""
+      }
+    ],
+    "concepts": [
+      "Adaptability",
+      "Robustness (evolution)",
+      "Computer science",
+      "Data science",
+      "Object detection",
+      "Systems engineering",
+      "Artificial intelligence",
+      "Field (mathematics)",
+      "Risk analysis (engineering)"
+    ]
+  },
+  {
     "paperId": "W3035016091",
     "title": "Tomato Diseases and Pests Detection Based on Improved Yolo V3 Convolutional Neural Network",
     "abstract": "Tomato is affected by various diseases and pests during its growth process. If the control is not timely, it will lead to yield reduction or even crop failure. How to control the diseases and pests effectively and help the vegetable farmers to improve the yield of tomato is very important, and the most important thing is to accurately identify the diseases and insect pests. Compared with the traditional pattern recognition method, the diseases and pests recognition method based on deep learning can directly input the original image. Instead of the tedious steps such as image preprocessing, feature extraction and feature classification in the traditional method, the end-to-end structure is adopted to simplify the recognition process and solve the problem that the feature extractor designed manually is difficult to obtain the feature expression closest to the natural attribute of the object. Based on the application of deep learning object detection, not only can save time and effort, but also can achieve real-time judgment, greatly reduce the huge loss caused by diseases and pests, which has important research value and significance. Based on the latest research results of detection theory based on deep learning object detection and the characteristics of tomato diseases and pests images, this study will build the dataset of tomato diseases and pests under the real natural environment, optimize the feature layer of Yolo V3 model by using image pyramid to achieve multi-scale feature detection, improve the detection accuracy and speed of Yolo V3 model, and detect the location and category of diseases and pests of tomato accurately and quickly. Through the above research, the key technology of tomato pest image recognition in natural environment is broken through, which provides reference for intelligent recognition and engineering application of plant diseases and pests detection.",
@@ -24992,117 +25103,6 @@
       "Deep learning",
       "Process (computing)",
       "Preprocessor"
-    ]
-  },
-  {
-    "paperId": "W4405446156",
-    "title": "The YOLO Framework: A Comprehensive Review of Evolution, Applications, and Benchmarks in Object Detection",
-    "abstract": "This paper provides a comprehensive review of the YOLO (You Only Look Once) framework up to its latest version, YOLO 11. As a state-of-the-art model for object detection, YOLO has revolutionized the field by achieving an optimal balance between speed and accuracy. The review traces the evolution of YOLO variants, highlighting key architectural improvements, performance benchmarks, and applications in domains such as healthcare, autonomous vehicles, and robotics. It also evaluates the framework’s strengths and limitations in practical scenarios, addressing challenges like small object detection, environmental variability, and computational constraints. By synthesizing findings from recent research, this work identifies critical gaps in the literature and outlines future directions to enhance YOLO’s adaptability, robustness, and integration into emerging technologies. This review provides researchers and practitioners with valuable insights to drive innovation in object detection and related applications.",
-    "year": 2024,
-    "authors": [
-      {
-        "authorId": "A5027473281",
-        "name": "Momina Liaqat Ali"
-      },
-      {
-        "authorId": "A5100397183",
-        "name": "Zhou Zhang"
-      }
-    ],
-    "citations": [],
-    "cited_by_count": 302,
-    "references": [
-      {
-        "paperId": "W639708223",
-        "title": ""
-      },
-      {
-        "paperId": "W1861492603",
-        "title": ""
-      },
-      {
-        "paperId": "W2193145675",
-        "title": ""
-      },
-      {
-        "paperId": "W2609144136",
-        "title": ""
-      },
-      {
-        "paperId": "W2612624696",
-        "title": ""
-      },
-      {
-        "paperId": "W2772155277",
-        "title": ""
-      },
-      {
-        "paperId": "W2800816754",
-        "title": ""
-      },
-      {
-        "paperId": "W2884367402",
-        "title": ""
-      },
-      {
-        "paperId": "W2893538180",
-        "title": ""
-      },
-      {
-        "paperId": "W2909494862",
-        "title": ""
-      },
-      {
-        "paperId": "W2919234133",
-        "title": ""
-      },
-      {
-        "paperId": "W2929565236",
-        "title": ""
-      },
-      {
-        "paperId": "W2950952672",
-        "title": ""
-      },
-      {
-        "paperId": "W2963037989",
-        "title": ""
-      },
-      {
-        "paperId": "W2963144738",
-        "title": ""
-      },
-      {
-        "paperId": "W2963351448",
-        "title": ""
-      },
-      {
-        "paperId": "W2963604034",
-        "title": ""
-      },
-      {
-        "paperId": "W2983943451",
-        "title": ""
-      },
-      {
-        "paperId": "W2988561273",
-        "title": ""
-      },
-      {
-        "paperId": "W3009010606",
-        "title": ""
-      }
-    ],
-    "concepts": [
-      "Adaptability",
-      "Robustness (evolution)",
-      "Computer science",
-      "Data science",
-      "Object detection",
-      "Systems engineering",
-      "Artificial intelligence",
-      "Field (mathematics)",
-      "Risk analysis (engineering)"
     ]
   },
   {
@@ -26015,7 +26015,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 58177,
+    "cited_by_count": 58181,
     "references": [
       {
         "paperId": "W19621276",
@@ -27370,7 +27370,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 1100,
+    "cited_by_count": 1101,
     "references": [
       {
         "paperId": "W639708223",
@@ -29773,7 +29773,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 10379,
+    "cited_by_count": 10380,
     "references": [
       {
         "paperId": "W176729393",
@@ -34809,7 +34809,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 22474,
+    "cited_by_count": 22476,
     "references": [
       {
         "paperId": "W146699588",
@@ -35850,127 +35850,113 @@
     ]
   },
   {
-    "paperId": "W3038721901",
-    "title": "Fuzzy Detection Aided Real-Time and Robust Visual Tracking Under Complex Environments",
-    "abstract": "Today, a new generation of artificial intelligence has brought several new research domains such as computer vision (CV). Thus, target tracking, the base of CV, has been a hotspot research domain. Correlation filter (CF)-based algorithm has been the basis of real-time tracking algorithms because of the high tracking efficiency. However, CF-based algorithms usually failed to track objects in complex environments. Therefore, this article proposes a fuzzy detection strategy to prejudge the tracking result. If the prejudge process determines that the tracking result is not good enough in the current frame, the stored target template is used for following tracking to avoid the template pollution. During testing on the OTB100 dataset, the experimental results show that the proposed auxiliary detection strategy improves the tracking robustness under complex environment by ensuring the tracking speed.",
-    "year": 2020,
+    "paperId": "W1996773532",
+    "title": "Three-dimensional object recognition",
+    "abstract": "A general-purpose computer vision system must be capable of recognizing three-dimensional (3-D) objects. This paper proposes a precise definition of the 3-D object recognition problem, discusses basic concepts associated with this problem, and reviews the relevant literature. Because range images (or depth maps) are often used as sensor input instead of intensity images, techniques for obtaining, processing, and characterizing range data are also surveyed.",
+    "year": 1985,
     "authors": [
       {
-        "authorId": "A5090788114",
-        "name": "Shuai Liu"
+        "authorId": "A5056369189",
+        "name": "Paul J. Besl"
       },
       {
-        "authorId": "A5053892249",
-        "name": "Shuai Wang"
-      },
-      {
-        "authorId": "A5064143503",
-        "name": "Xinyu Liu"
-      },
-      {
-        "authorId": "A5058936239",
-        "name": "Chin‐Teng Lin"
-      },
-      {
-        "authorId": "A5108044017",
-        "name": "Zhihan Lv"
+        "authorId": "A5010478919",
+        "name": "Ramesh Jain"
       }
     ],
     "citations": [],
-    "cited_by_count": 270,
+    "cited_by_count": 975,
     "references": [
       {
-        "paperId": "W161114242",
+        "paperId": "W7224686",
         "title": ""
       },
       {
-        "paperId": "W818325216",
+        "paperId": "W10195015",
         "title": ""
       },
       {
-        "paperId": "W1807914171",
+        "paperId": "W12849112",
         "title": ""
       },
       {
-        "paperId": "W1908905119",
+        "paperId": "W24360331",
         "title": ""
       },
       {
-        "paperId": "W1915599933",
+        "paperId": "W35459112",
         "title": ""
       },
       {
-        "paperId": "W1964846093",
+        "paperId": "W41074368",
         "title": ""
       },
       {
-        "paperId": "W2044986361",
+        "paperId": "W55294747",
         "title": ""
       },
       {
-        "paperId": "W2047121359",
+        "paperId": "W73093357",
         "title": ""
       },
       {
-        "paperId": "W2048581969",
+        "paperId": "W108837414",
         "title": ""
       },
       {
-        "paperId": "W2052083587",
+        "paperId": "W121511052",
         "title": ""
       },
       {
-        "paperId": "W2086854199",
+        "paperId": "W126654702",
         "title": ""
       },
       {
-        "paperId": "W2089961441",
+        "paperId": "W136365859",
         "title": ""
       },
       {
-        "paperId": "W2113577207",
+        "paperId": "W138022751",
         "title": ""
       },
       {
-        "paperId": "W2118097920",
+        "paperId": "W151154172",
         "title": ""
       },
       {
-        "paperId": "W2140811607",
+        "paperId": "W154157134",
         "title": ""
       },
       {
-        "paperId": "W2149148545",
+        "paperId": "W186878922",
         "title": ""
       },
       {
-        "paperId": "W2152401424",
+        "paperId": "W203713847",
         "title": ""
       },
       {
-        "paperId": "W2154889144",
+        "paperId": "W259717050",
         "title": ""
       },
       {
-        "paperId": "W2160797951",
+        "paperId": "W311394431",
         "title": ""
       },
       {
-        "paperId": "W2162349892",
+        "paperId": "W343528036",
         "title": ""
       }
     ],
     "concepts": [
       "Computer science",
       "Artificial intelligence",
-      "Robustness (evolution)",
+      "Cognitive neuroscience of visual object recognition",
       "Computer vision",
-      "Fuzzy logic",
-      "Tracking system",
-      "Tracking (education)",
-      "Eye tracking",
-      "Pattern recognition (psychology)",
-      "Filter (signal processing)"
+      "Range (aeronautics)",
+      "Object (grammar)",
+      "3D single-object recognition",
+      "Image processing"
     ]
   },
   {
@@ -36583,6 +36569,124 @@
     ]
   },
   {
+    "paperId": "W3027201985",
+    "title": "Change Detection Based on Artificial Intelligence: State-of-the-Art and Challenges",
+    "abstract": "Change detection based on remote sensing (RS) data is an important method of detecting changes on the Earth’s surface and has a wide range of applications in urban planning, environmental monitoring, agriculture investigation, disaster assessment, and map revision. In recent years, integrated artificial intelligence (AI) technology has become a research focus in developing new change detection methods. Although some researchers claim that AI-based change detection approaches outperform traditional change detection approaches, it is not immediately obvious how and to what extent AI can improve the performance of change detection. This review focuses on the state-of-the-art methods, applications, and challenges of AI for change detection. Specifically, the implementation process of AI-based change detection is first introduced. Then, the data from different sensors used for change detection, including optical RS data, synthetic aperture radar (SAR) data, street view images, and combined heterogeneous data, are presented, and the available open datasets are also listed. The general frameworks of AI-based change detection methods are reviewed and analyzed systematically, and the unsupervised schemes used in AI-based change detection are further analyzed. Subsequently, the commonly used networks in AI for change detection are described. From a practical point of view, the application domains of AI-based change detection methods are classified based on their applicability. Finally, the major challenges and prospects of AI for change detection are discussed and delineated, including (a) heterogeneous big data processing, (b) unsupervised AI, and (c) the reliability of AI. This review will be beneficial for researchers in understanding this field.",
+    "year": 2020,
+    "authors": [
+      {
+        "authorId": "A5100644664",
+        "name": "Wenzhong Shi"
+      },
+      {
+        "authorId": "A5012727269",
+        "name": "Min Zhang"
+      },
+      {
+        "authorId": "A5100421978",
+        "name": "Rui Zhang"
+      },
+      {
+        "authorId": "A5101949052",
+        "name": "Shanxiong Chen"
+      },
+      {
+        "authorId": "A5101585032",
+        "name": "Zhao Zhan"
+      }
+    ],
+    "citations": [],
+    "cited_by_count": 571,
+    "references": [
+      {
+        "paperId": "W10703220",
+        "title": ""
+      },
+      {
+        "paperId": "W1491732938",
+        "title": ""
+      },
+      {
+        "paperId": "W1760372221",
+        "title": ""
+      },
+      {
+        "paperId": "W1824774525",
+        "title": ""
+      },
+      {
+        "paperId": "W1955055330",
+        "title": ""
+      },
+      {
+        "paperId": "W1965217701",
+        "title": ""
+      },
+      {
+        "paperId": "W1967831808",
+        "title": ""
+      },
+      {
+        "paperId": "W1971369801",
+        "title": ""
+      },
+      {
+        "paperId": "W1981571657",
+        "title": ""
+      },
+      {
+        "paperId": "W1998860290",
+        "title": ""
+      },
+      {
+        "paperId": "W2011572981",
+        "title": ""
+      },
+      {
+        "paperId": "W2014324073",
+        "title": ""
+      },
+      {
+        "paperId": "W2023454371",
+        "title": ""
+      },
+      {
+        "paperId": "W2027077955",
+        "title": ""
+      },
+      {
+        "paperId": "W2028428306",
+        "title": ""
+      },
+      {
+        "paperId": "W2030728252",
+        "title": ""
+      },
+      {
+        "paperId": "W2030965711",
+        "title": ""
+      },
+      {
+        "paperId": "W2032552004",
+        "title": ""
+      },
+      {
+        "paperId": "W2035639988",
+        "title": ""
+      },
+      {
+        "paperId": "W2036798369",
+        "title": ""
+      }
+    ],
+    "concepts": [
+      "Change detection",
+      "Computer science",
+      "Artificial intelligence",
+      "Machine learning"
+    ]
+  },
+  {
     "paperId": "W3044592640",
     "title": "Assessment and Estimation of Face Detection Performance Based on Deep Learning for Forensic Applications",
     "abstract": "Face recognition is a valuable forensic tool for criminal investigators since it certainly helps in identifying individuals in scenarios of criminal activity like fugitives or child sexual abuse. It is, however, a very challenging task as it must be able to handle low-quality images of real world settings and fulfill real time requirements. Deep learning approaches for face detection have proven to be very successful but they require large computation power and processing time. In this work, we evaluate the speed-accuracy tradeoff of three popular deep-learning-based face detectors on the WIDER Face and UFDD data sets in several CPUs and GPUs. We also develop a regression model capable to estimate the performance, both in terms of processing time and accuracy. We expect this to become a very useful tool for the end user in forensic laboratories in order to estimate the performance for different face detection options. Experimental results showed that the best speed-accuracy tradeoff is achieved with images resized to 50% of the original size in GPUs and images resized to 25% of the original size in CPUs. Moreover, performance can be estimated using multiple linear regression models with a Mean Absolute Error (MAE) of 0.113, which is very promising for the forensic field.",
@@ -36710,124 +36814,6 @@
       "Quality (philosophy)",
       "Computer engineering",
       "Pattern recognition (psychology)"
-    ]
-  },
-  {
-    "paperId": "W3027201985",
-    "title": "Change Detection Based on Artificial Intelligence: State-of-the-Art and Challenges",
-    "abstract": "Change detection based on remote sensing (RS) data is an important method of detecting changes on the Earth’s surface and has a wide range of applications in urban planning, environmental monitoring, agriculture investigation, disaster assessment, and map revision. In recent years, integrated artificial intelligence (AI) technology has become a research focus in developing new change detection methods. Although some researchers claim that AI-based change detection approaches outperform traditional change detection approaches, it is not immediately obvious how and to what extent AI can improve the performance of change detection. This review focuses on the state-of-the-art methods, applications, and challenges of AI for change detection. Specifically, the implementation process of AI-based change detection is first introduced. Then, the data from different sensors used for change detection, including optical RS data, synthetic aperture radar (SAR) data, street view images, and combined heterogeneous data, are presented, and the available open datasets are also listed. The general frameworks of AI-based change detection methods are reviewed and analyzed systematically, and the unsupervised schemes used in AI-based change detection are further analyzed. Subsequently, the commonly used networks in AI for change detection are described. From a practical point of view, the application domains of AI-based change detection methods are classified based on their applicability. Finally, the major challenges and prospects of AI for change detection are discussed and delineated, including (a) heterogeneous big data processing, (b) unsupervised AI, and (c) the reliability of AI. This review will be beneficial for researchers in understanding this field.",
-    "year": 2020,
-    "authors": [
-      {
-        "authorId": "A5100644664",
-        "name": "Wenzhong Shi"
-      },
-      {
-        "authorId": "A5012727269",
-        "name": "Min Zhang"
-      },
-      {
-        "authorId": "A5100421978",
-        "name": "Rui Zhang"
-      },
-      {
-        "authorId": "A5101949052",
-        "name": "Shanxiong Chen"
-      },
-      {
-        "authorId": "A5101585032",
-        "name": "Zhao Zhan"
-      }
-    ],
-    "citations": [],
-    "cited_by_count": 571,
-    "references": [
-      {
-        "paperId": "W10703220",
-        "title": ""
-      },
-      {
-        "paperId": "W1491732938",
-        "title": ""
-      },
-      {
-        "paperId": "W1760372221",
-        "title": ""
-      },
-      {
-        "paperId": "W1824774525",
-        "title": ""
-      },
-      {
-        "paperId": "W1955055330",
-        "title": ""
-      },
-      {
-        "paperId": "W1965217701",
-        "title": ""
-      },
-      {
-        "paperId": "W1967831808",
-        "title": ""
-      },
-      {
-        "paperId": "W1971369801",
-        "title": ""
-      },
-      {
-        "paperId": "W1981571657",
-        "title": ""
-      },
-      {
-        "paperId": "W1998860290",
-        "title": ""
-      },
-      {
-        "paperId": "W2011572981",
-        "title": ""
-      },
-      {
-        "paperId": "W2014324073",
-        "title": ""
-      },
-      {
-        "paperId": "W2023454371",
-        "title": ""
-      },
-      {
-        "paperId": "W2027077955",
-        "title": ""
-      },
-      {
-        "paperId": "W2028428306",
-        "title": ""
-      },
-      {
-        "paperId": "W2030728252",
-        "title": ""
-      },
-      {
-        "paperId": "W2030965711",
-        "title": ""
-      },
-      {
-        "paperId": "W2032552004",
-        "title": ""
-      },
-      {
-        "paperId": "W2035639988",
-        "title": ""
-      },
-      {
-        "paperId": "W2036798369",
-        "title": ""
-      }
-    ],
-    "concepts": [
-      "Change detection",
-      "Computer science",
-      "Artificial intelligence",
-      "Machine learning"
     ]
   },
   {
@@ -42530,6 +42516,68 @@
     ]
   },
   {
+    "paperId": "W2912199856",
+    "title": "XNect: Real-time Multi-person 3D Human Pose Estimation with a Single RGB Camera",
+    "abstract": "We present a real-time approach for multi-person 3D motion capture at over 30 fps using a single RGB camera. It operates in generic scenes and is robust to difficult occlusions both by other people and objects. Our method operates in subsequent stages. The first stage is a convolutional neural network (CNN) that estimates 2D and 3D pose features along with identity assignments for all visible joints of all individuals. We contribute a new architecture for this CNN, called SelecSLS Net, that uses novel selective long and short range skip connections to improve the information flow allowing for a drastically faster network without compromising accuracy. In the second stage, a fully-connected neural network turns the possibly partial (on account of occlusion) 2D pose and 3D pose features for each subject into a complete 3D pose estimate per individual. The third stage applies space-time skeletal model fitting to the predicted 2D and 3D pose per subject to further reconcile the 2D and 3D pose, and enforce temporal coherence. Our method returns the full skeletal pose in joint angles for each subject. This is a further key distinction from previous work that neither extracted global body positions nor joint angle results of a coherent skeleton in real time for multi-person scenes. The proposed system runs on consumer hardware at a previously unseen speed of more than 30 fps given 512x320 images as input while achieving state-of-the-art accuracy, which we will demonstrate on a range of challenging real-world scenes.",
+    "year": 2019,
+    "authors": [
+      {
+        "authorId": "A5013373065",
+        "name": "Dushyant Mehta"
+      },
+      {
+        "authorId": "A5024553204",
+        "name": "Oleksandr Sotnychenko"
+      },
+      {
+        "authorId": "A5072277461",
+        "name": "Franziska Mueller"
+      },
+      {
+        "authorId": "A5102954665",
+        "name": "Weipeng Xu"
+      },
+      {
+        "authorId": "A5079162835",
+        "name": "Mohamed Elgharib"
+      },
+      {
+        "authorId": "A5038674741",
+        "name": "Pascal Fua"
+      },
+      {
+        "authorId": "A5105697746",
+        "name": "Hans‐Peter Seidel"
+      },
+      {
+        "authorId": "A5058949470",
+        "name": "Helge Rhodin"
+      },
+      {
+        "authorId": "A5076908763",
+        "name": "Gerard Pons‐Moll"
+      },
+      {
+        "authorId": "A5020664641",
+        "name": "Christian Theobalt"
+      }
+    ],
+    "citations": [],
+    "cited_by_count": 33,
+    "references": [],
+    "concepts": [
+      "Artificial intelligence",
+      "Computer science",
+      "Computer vision",
+      "Pose",
+      "RGB color model",
+      "Convolutional neural network",
+      "Articulated body pose estimation",
+      "3D pose estimation",
+      "Coherence (philosophical gambling strategy)"
+    ]
+  },
+  {
     "paperId": "W4313476570",
     "title": "Visualization and Visual Analytics Approaches for Image and Video Datasets: A Survey",
     "abstract": "Image and video data analysis has become an increasingly important research area with applications in different domains such as security surveillance, healthcare, augmented and virtual reality, video and image editing, activity analysis and recognition, synthetic content generation, distance education, telepresence, remote sensing, sports analytics, art, non-photorealistic rendering, search engines, and social media. Recent advances in Artificial Intelligence (AI) and particularly deep learning have sparked new research challenges and led to significant advancements, especially in image and video analysis. These advancements have also resulted in significant research and development in other areas such as visualization and visual analytics, and have created new opportunities for future lines of research. In this survey article, we present the current state of the art at the intersection of visualization and visual analytics, and image and video data analysis. We categorize the visualization articles included in our survey based on different taxonomies used in visualization and visual analytics research. We review these articles in terms of task requirements, tools, datasets, and application areas. We also discuss insights based on our survey results, trends and patterns, the current focus of visualization research, and opportunities for future research.",
@@ -42763,121 +42811,6 @@
     ]
   },
   {
-    "paperId": "W4382767198",
-    "title": "Spatio-Visual Fusion-Based Person Re-Identification for Overhead Fisheye Images",
-    "abstract": "Person re-identification (PRID) has been thoroughly researched in typical surveillance scenarios where various scenes are monitored by side-mounted, rectilinear-lens cameras. To date, few methods have been proposed for fisheye cameras mounted overhead and their performance is lacking. In order to close this performance gap, we propose a multi-feature framework for fisheye PRID where we combine deep-learning, color-based and location-based features by means of novel feature fusion. We evaluate the performance of our framework for various feature combinations on FRIDA, a public fisheye PRID dataset. The results demonstrate that our multi-feature approach outperforms recent appearance-based deep-learning methods by almost 18% points and location-based methods by almost 3% points in matching accuracy. We also demonstrate the potential application of the proposed PRID framework to people counting in large, crowded indoor spaces.",
-    "year": 2023,
-    "authors": [
-      {
-        "authorId": "A5027261240",
-        "name": "Mertcan Cokbas"
-      },
-      {
-        "authorId": "A5036913803",
-        "name": "Prakash Ishwar"
-      },
-      {
-        "authorId": "A5063199641",
-        "name": "Janusz Konrad"
-      }
-    ],
-    "citations": [],
-    "cited_by_count": 5,
-    "references": [
-      {
-        "paperId": "W46454230",
-        "title": ""
-      },
-      {
-        "paperId": "W1492752543",
-        "title": ""
-      },
-      {
-        "paperId": "W1965555277",
-        "title": ""
-      },
-      {
-        "paperId": "W1979260620",
-        "title": ""
-      },
-      {
-        "paperId": "W1982925187",
-        "title": ""
-      },
-      {
-        "paperId": "W2096306138",
-        "title": ""
-      },
-      {
-        "paperId": "W2194775991",
-        "title": ""
-      },
-      {
-        "paperId": "W2204750386",
-        "title": ""
-      },
-      {
-        "paperId": "W2433217581",
-        "title": ""
-      },
-      {
-        "paperId": "W2531440880",
-        "title": ""
-      },
-      {
-        "paperId": "W2905341531",
-        "title": ""
-      },
-      {
-        "paperId": "W2963842104",
-        "title": ""
-      },
-      {
-        "paperId": "W2979931389",
-        "title": ""
-      },
-      {
-        "paperId": "W2982700064",
-        "title": ""
-      },
-      {
-        "paperId": "W2990827756",
-        "title": ""
-      },
-      {
-        "paperId": "W2993689312",
-        "title": ""
-      },
-      {
-        "paperId": "W2998522188",
-        "title": ""
-      },
-      {
-        "paperId": "W2998792609",
-        "title": ""
-      },
-      {
-        "paperId": "W3035782943",
-        "title": ""
-      },
-      {
-        "paperId": "W3122359948",
-        "title": ""
-      }
-    ],
-    "concepts": [
-      "Computer science",
-      "Artificial intelligence",
-      "Overhead (engineering)",
-      "Computer vision",
-      "Feature (linguistics)",
-      "Matching (statistics)",
-      "Feature extraction",
-      "Identification (biology)",
-      "Pattern recognition (psychology)"
-    ]
-  },
-  {
     "paperId": "W2150874632",
     "title": "Toolglass and magic lenses",
     "abstract": "Toolglass widgets are new user interface tools that can appear, as though on a transparent sheet of glass, between an application and a traditional cursor. They can be positioned with one hand while the other positions the cursor. The widgets provide a rich and concise vocabulary for operating on application objects. These widgets may incorporate visual filters, called Magic Lens filters, that modify the presentation of application objects to reveal hidden information, to enhance data of interest, or to suppress distracting information. Together, these tools form a see-through interface that offers many advantages over traditional controls. They provide a new style of interaction that better exploits the user's everyday skills. They can reduce steps, cursor motion, and errors. Many widgets can be provided in a user interface, by designers and by users, without requiring dedicated screen space. In addition, lenses provide rich context-dependent feedback and the ability to view details and context simultaneously. Our widgets and lenses can be combined to form operation and viewing macros, and can be used over multiple applications.",
@@ -42996,6 +42929,121 @@
       "Graphics",
       "Art history",
       "World Wide Web"
+    ]
+  },
+  {
+    "paperId": "W4382767198",
+    "title": "Spatio-Visual Fusion-Based Person Re-Identification for Overhead Fisheye Images",
+    "abstract": "Person re-identification (PRID) has been thoroughly researched in typical surveillance scenarios where various scenes are monitored by side-mounted, rectilinear-lens cameras. To date, few methods have been proposed for fisheye cameras mounted overhead and their performance is lacking. In order to close this performance gap, we propose a multi-feature framework for fisheye PRID where we combine deep-learning, color-based and location-based features by means of novel feature fusion. We evaluate the performance of our framework for various feature combinations on FRIDA, a public fisheye PRID dataset. The results demonstrate that our multi-feature approach outperforms recent appearance-based deep-learning methods by almost 18% points and location-based methods by almost 3% points in matching accuracy. We also demonstrate the potential application of the proposed PRID framework to people counting in large, crowded indoor spaces.",
+    "year": 2023,
+    "authors": [
+      {
+        "authorId": "A5027261240",
+        "name": "Mertcan Cokbas"
+      },
+      {
+        "authorId": "A5036913803",
+        "name": "Prakash Ishwar"
+      },
+      {
+        "authorId": "A5063199641",
+        "name": "Janusz Konrad"
+      }
+    ],
+    "citations": [],
+    "cited_by_count": 5,
+    "references": [
+      {
+        "paperId": "W46454230",
+        "title": ""
+      },
+      {
+        "paperId": "W1492752543",
+        "title": ""
+      },
+      {
+        "paperId": "W1965555277",
+        "title": ""
+      },
+      {
+        "paperId": "W1979260620",
+        "title": ""
+      },
+      {
+        "paperId": "W1982925187",
+        "title": ""
+      },
+      {
+        "paperId": "W2096306138",
+        "title": ""
+      },
+      {
+        "paperId": "W2194775991",
+        "title": ""
+      },
+      {
+        "paperId": "W2204750386",
+        "title": ""
+      },
+      {
+        "paperId": "W2433217581",
+        "title": ""
+      },
+      {
+        "paperId": "W2531440880",
+        "title": ""
+      },
+      {
+        "paperId": "W2905341531",
+        "title": ""
+      },
+      {
+        "paperId": "W2963842104",
+        "title": ""
+      },
+      {
+        "paperId": "W2979931389",
+        "title": ""
+      },
+      {
+        "paperId": "W2982700064",
+        "title": ""
+      },
+      {
+        "paperId": "W2990827756",
+        "title": ""
+      },
+      {
+        "paperId": "W2993689312",
+        "title": ""
+      },
+      {
+        "paperId": "W2998522188",
+        "title": ""
+      },
+      {
+        "paperId": "W2998792609",
+        "title": ""
+      },
+      {
+        "paperId": "W3035782943",
+        "title": ""
+      },
+      {
+        "paperId": "W3122359948",
+        "title": ""
+      }
+    ],
+    "concepts": [
+      "Computer science",
+      "Artificial intelligence",
+      "Overhead (engineering)",
+      "Computer vision",
+      "Feature (linguistics)",
+      "Matching (statistics)",
+      "Feature extraction",
+      "Identification (biology)",
+      "Pattern recognition (psychology)"
     ]
   },
   {
@@ -43259,132 +43307,6 @@
       "Computer science",
       "Remote sensing",
       "Real-time computing"
-    ]
-  },
-  {
-    "paperId": "W3028319345",
-    "title": "RAPiD: Rotation-Aware People Detection in Overhead Fisheye Images",
-    "abstract": "Recent methods for people detection in overhead, fisheye images either use radially-aligned bounding boxes to represent people, assuming people always appear along image radius or require significant pre-/post-processing which radically increases computational complexity. In this work, we develop an end-to-end rotation-aware people detection method, named RAPiD, that detects people using arbitrarily-oriented bounding boxes. Our fully-convolutional neural network directly regresses the angle of each bounding box using a periodic loss function, which accounts for angle periodicities. We have also created a new dataset with spatio-temporal annotations of rotated bounding boxes, for people detection as well as other vision tasks in overhead fisheye videos. We show that our simple, yet effective method outperforms state-of-the-art results on three fisheye-image datasets. Code and dataset are available at http://vip.bu.edu/rapid .",
-    "year": 2020,
-    "authors": [
-      {
-        "authorId": "A5029146300",
-        "name": "Zhihao Duan"
-      },
-      {
-        "authorId": "A5087532628",
-        "name": "M. Ozan Tezcan"
-      },
-      {
-        "authorId": "A5108726079",
-        "name": "Hayato Nakamura"
-      },
-      {
-        "authorId": "A5036913803",
-        "name": "Prakash Ishwar"
-      },
-      {
-        "authorId": "A5063199641",
-        "name": "Janusz Konrad"
-      }
-    ],
-    "citations": [],
-    "cited_by_count": 4,
-    "references": [
-      {
-        "paperId": "W1586208757",
-        "title": ""
-      },
-      {
-        "paperId": "W1833143043",
-        "title": ""
-      },
-      {
-        "paperId": "W1861492603",
-        "title": ""
-      },
-      {
-        "paperId": "W2125556102",
-        "title": ""
-      },
-      {
-        "paperId": "W2139479830",
-        "title": ""
-      },
-      {
-        "paperId": "W2161969291",
-        "title": ""
-      },
-      {
-        "paperId": "W2472272718",
-        "title": ""
-      },
-      {
-        "paperId": "W2565639579",
-        "title": ""
-      },
-      {
-        "paperId": "W2570343428",
-        "title": ""
-      },
-      {
-        "paperId": "W2579985080",
-        "title": ""
-      },
-      {
-        "paperId": "W2613718673",
-        "title": ""
-      },
-      {
-        "paperId": "W2765611468",
-        "title": ""
-      },
-      {
-        "paperId": "W2783093293",
-        "title": ""
-      },
-      {
-        "paperId": "W2791697444",
-        "title": ""
-      },
-      {
-        "paperId": "W2796347433",
-        "title": ""
-      },
-      {
-        "paperId": "W2899607431",
-        "title": ""
-      },
-      {
-        "paperId": "W2903384957",
-        "title": ""
-      },
-      {
-        "paperId": "W2914237488",
-        "title": ""
-      },
-      {
-        "paperId": "W2922078872",
-        "title": ""
-      },
-      {
-        "paperId": "W2951548327",
-        "title": ""
-      }
-    ],
-    "concepts": [
-      "Bounding overwatch",
-      "Computer science",
-      "Overhead (engineering)",
-      "Convolutional neural network",
-      "Artificial intelligence",
-      "Minimum bounding box",
-      "Computer vision",
-      "Rotation (mathematics)",
-      "Image (mathematics)",
-      "Code (set theory)",
-      "Function (biology)",
-      "Pattern recognition (psychology)"
     ]
   },
   {
@@ -47643,7 +47565,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 952,
+    "cited_by_count": 954,
     "references": [
       {
         "paperId": "W2966661",
@@ -48273,7 +48195,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 2219,
+    "cited_by_count": 2220,
     "references": [
       {
         "paperId": "W4259436",
@@ -49195,7 +49117,7 @@
       }
     ],
     "citations": [],
-    "cited_by_count": 1813,
+    "cited_by_count": 1814,
     "references": [
       {
         "paperId": "W922358034",

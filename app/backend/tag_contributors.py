@@ -19,10 +19,10 @@ db = mongo["literature_review"]
 es = Elasticsearch("http://localhost:9200", request_timeout=60)
 
 # Load the two original source files to know who fetched what
-with open("data/your_papers.json", encoding="utf-8") as f:
+with open("/Users/mahenoor/PycharmProjects/kg-hybrid-storage-project/data/Mahenoor_papers.json", encoding="utf-8") as f:
     my_ids = {p["paperId"] for p in json.load(f)}
 
-with open("data/teammate_papers.json", encoding="utf-8") as f:
+with open("/Users/mahenoor/PycharmProjects/kg-hybrid-storage-project/data/Alekhya_papers.json") as f:
     teammate_ids = {p["paperId"] for p in json.load(f)}
 
 print(f"My papers: {len(my_ids)}")
